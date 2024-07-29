@@ -19,6 +19,15 @@ service = client.connect(
     sslContext=ssl_context
 )
 def execute_spl_query(query):
+    """
+    Executes a Splunk query and returns the results.
+
+    Args:
+        query (str): The SPL query to be executed.
+
+    Returns:
+        list: A list of dictionaries, each representing a result from the query.
+    """
     job = service.jobs.create(query)
     while not job.is_done():
         pass
@@ -27,15 +36,34 @@ def execute_spl_query(query):
         results_list.append(result)
     return results_list
 
-def aggregate_data(requests:dict):
-    aggregated_data = {}
-    for key,values in requests.items():
-        aggregated_data[key] = execute_spl_query(values)
+# Función principal para agregar datos
+def aggregate_data():
+    """
+    Aggregates data from various Splunk queries.
 
-    # dashboards = execute_spl_query("|rest/servicesNS/-/-/data/ui/views")
-    # saved_searches = execute_spl_query("|rest/servicesNS/-/-/saved/searches")
-    # fields = execute_spl_query("search index=_internal | fieldsummary | fields field")
-    # apps = execute_spl_query("| rest /services/apps/local | search disabled=0 | table label title version description")
+    This function executes multiple Splunk queries to gather data about dashboards, saved searches, fields, and apps.
+    The results of these queries are then stored in a dictionary.
 
-    return aggregate_data
+    Returns:
+        json: A dictionary containing the aggregated data from the Splunk queries.
 
+    improvements:
+    - Add error handling for failed queries.
+    - change the function to accept a list of queries to execute.
+    """
+
+    dashboards = execute_spl_query("|rest/servicesNS/-/-/data/ui/views")
+    saved_searches = execute_spl_query("|rest/servicesNS/-/-/saved/searches")
+    fields = execute_spl_query("search index=_internal | fieldsummary | fields field")
+    apps = execute_spl_query("| rest /services/apps/local | search disabled=0 | table label title version description")
+
+    aggregated_data = {
+        "dashboards": dashboards,
+        "saved_searches": saved_searches,
+        "fields": fields,
+        "apps": apps
+    }
+
+    return json.dumps(aggregated_data, indent=4)
+
+print(aggregate_data())
