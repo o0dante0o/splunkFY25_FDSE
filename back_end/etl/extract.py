@@ -27,6 +27,10 @@ def execute_spl_query(query):
 
     Returns:
         list: A list of dictionaries, each representing a result from the query.
+    
+    improvements:
+        - Add error handling for failed queries.
+        - call only the necessary fields from the query.
     """
     job = service.jobs.create(query)
     while not job.is_done():
@@ -65,5 +69,3 @@ def aggregate_data():
     }
 
     return json.dumps(aggregated_data, indent=4)
-
-print(aggregate_data())
