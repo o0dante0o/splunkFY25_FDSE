@@ -5,10 +5,8 @@ from dotenv import load_dotenv
 import ssl
 import json
 
-
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 load_dotenv()
-
 
 service = client.connect(
     host=os.getenv("SPLUNK_HOST"),      
@@ -18,6 +16,7 @@ service = client.connect(
     scheme=os.getenv("SPLUNK_SCHEME"),        
     sslContext=ssl_context
 )
+
 def execute_spl_query(query):
     """
     Executes a Splunk query and returns the results.
@@ -27,10 +26,6 @@ def execute_spl_query(query):
 
     Returns:
         list: A list of dictionaries, each representing a result from the query.
-    
-    improvements:
-        - Add error handling for failed queries.
-        - call only the necessary fields from the query.
     """
     job = service.jobs.create(query)
     while not job.is_done():
@@ -40,25 +35,25 @@ def execute_spl_query(query):
         results_list.append(result)
     return results_list
 
-# Función principal para agregar datos
 def aggregate_data():
     """
     Aggregates data from various Splunk queries.
 
-    This function executes multiple Splunk queries to gather data about dashboards, saved searches, fields, and apps.
-    The results of these queries are then stored in a dictionary.
-
     Returns:
         json: A dictionary containing the aggregated data from the Splunk queries.
-
-    improvements:
-    - Add error handling for failed queries.
-    - change the function to accept a list of queries to execute.
     """
-
-    dashboards = execute_spl_query("|rest/servicesNS/-/-/data/ui/views")
-    saved_searches = execute_spl_query("|rest/servicesNS/-/-/saved/searches")
+    dashboards = execute_spl_query('''| rest /servicesNS/-/-/data/ui/views splunk_server=local 
+                                    | table label, title, description, "eai:acl.owner", "eai:acl.app" 
+                                    | rename "eai:acl.owner" as owner, "eai:acl.app" as app 
+                                    ''')
+    
+    saved_searches = execute_spl_query('''| rest/servicesNS/-/-/saved/searches splunk_server=local 
+                                        | table label, title, description, "eai:acl.owner", "eai:acl.app" 
+                                        | rename "eai:acl.owner" as owner, "eai:acl.app" as app 
+                                        | streamstats count as report_id''')
+    
     fields = execute_spl_query("search index=_internal | fieldsummary | fields field")
+
     apps = execute_spl_query("| rest /services/apps/local | search disabled=0 | table label title version description")
 
     aggregated_data = {
