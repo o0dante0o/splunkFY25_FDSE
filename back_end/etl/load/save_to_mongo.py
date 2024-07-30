@@ -23,3 +23,5 @@ def save_to_mongo(collection_name, data_list):
     db = client[mongo_db_name]
     collection = db[collection_name]
     collection.insert_many(data_list)
+
+    return 'data saved : execution successful'
