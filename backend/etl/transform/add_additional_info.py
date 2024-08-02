@@ -1,20 +1,37 @@
 from datetime import datetime
-#from back_end.decorators import execution_time
 
-# @execution_time
-def add_additional_info(data_list):
+def add_additional_info(results):
     """
     Adds additional information to each dictionary in a list of dictionaries.
 
     Args:
-        data_list (list): A list of dictionaries to which additional info will be added.
+        results (dict): A dictionary of lists of dictionaries to which additional info will be added.
 
     Returns:
-        list: The modified list of dictionaries with added info.
+        dict: The modified dictionary with added info in each list of dictionaries.
     """
     now = datetime.now().isoformat()  
-    for item in data_list:
-        item['date_time'] = now  
-        item['inactive'] = False  
-        item['last_edited'] = now  
-    return data_list 
+    
+    # Define the base structure with all necessary fields
+    base_structure = {
+        'name': None,
+        'description': None,
+        'owner': None,
+        'custom_clasification': 'unclassified',
+        'tags': [],
+        'date_time': now,
+        'inactive': False,
+        'last_edited': now
+    }
+
+    enriched_data = {}
+
+    for key, items in results.items():
+        enriched_items = []
+        for item in items:
+            enriched_item = base_structure.copy()
+            enriched_item.update(item)
+            enriched_items.append(enriched_item)
+        enriched_data[key] = enriched_items
+    
+    return enriched_data

@@ -1,14 +1,12 @@
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-#from back_end.decorators import execution_time
-
 
 load_dotenv()
 
 mongo_uri = os.getenv('MONGO_URI')
 mongo_db_name = os.getenv('MONGO_DB_NAME')
-# @execution_time
+
 def save_to_mongo(collection_name, data_list):
     """
     Saves a list of dictionaries to a specified MongoDB collection.
@@ -18,12 +16,10 @@ def save_to_mongo(collection_name, data_list):
         data_list (list): A list of dictionaries to be inserted into the collection.
 
     Returns:
-        None
+        str: Confirmation message indicating successful execution.
     """
-    
     client = MongoClient(mongo_uri, tls=True, tlsAllowInvalidCertificates=True)
     db = client[mongo_db_name]
     collection = db[collection_name]
     collection.insert_many(data_list)
-
     return 'data saved : execution successful'
