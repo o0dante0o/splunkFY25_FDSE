@@ -51,5 +51,5 @@ def aggregate_data(collections):
         query = collections[collection]
         results_list = execute_spl_query(query)
         aggregated_data[collection] = results_list
-    print(aggregated_data)
+
     return json.dumps(aggregated_data, indent=4)

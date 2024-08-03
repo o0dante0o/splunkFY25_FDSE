@@ -17,7 +17,7 @@ def add_additional_info(results):
         'name': None,
         'description': None,
         'owner': None,
-        'custom_clasification': 'unclassified',
+        'custom_classification': 'unclassified',
         'tags': [],
         'date_time': now,
         'inactive': False,
