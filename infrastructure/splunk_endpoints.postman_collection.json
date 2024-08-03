@@ -1,0 +1,283 @@
+{
+	"info": {
+		"_postman_id": "66dee6d2-939d-4dbf-9b08-6aee9a00e1e7",
+		"name": "splunk_endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15232817"
+	},
+	"item": [
+		{
+			"name": "list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/list?type=alerts",
+					"protocol": "https",
+					"host": [
+						"ve0g3ekx8b",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"list"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "alerts"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/search?q=\"alert_webhook\"",
+					"protocol": "https",
+					"host": [
+						"ve0g3ekx8b",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "\"alert_webhook\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "overview",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/overview",
+					"protocol": "https",
+					"host": [
+						"ve0g3ekx8b",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove_tag",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tag\": \"example_tag2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/remove?type=remove_tag&id=66adb9ceeaf8de0e6cf0f626",
+					"protocol": "https",
+					"host": [
+						"ve0g3ekx8b",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"remove"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "remove_tag"
+						},
+						{
+							"key": "id",
+							"value": "66adb9ceeaf8de0e6cf0f626"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove_tag Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/remove?type=remove_document&id=66adb9caeaf8de0e6cf0f56f",
+					"protocol": "https",
+					"host": [
+						"ve0g3ekx8b",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"remove"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "remove_document"
+						},
+						{
+							"key": "id",
+							"value": "66adb9caeaf8de0e6cf0f56f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add custom_classification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"custom_classification\": \"Secret\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/add?type=custom_classification&id=66adb9caeaf8de0e6cf0f56f",
+					"protocol": "https",
+					"host": [
+						"ve0g3ekx8b",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"add"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "custom_classification"
+						},
+						{
+							"key": "id",
+							"value": "66adb9caeaf8de0e6cf0f56f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add tag",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"tag\": \"example_tag\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/add?type=add_tag&id=66adb9caeaf8de0e6cf0f56f",
+					"protocol": "https",
+					"host": [
+						"ve0g3ekx8b",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"add"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "add_tag"
+						},
+						{
+							"key": "id",
+							"value": "66adb9caeaf8de0e6cf0f56f"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
