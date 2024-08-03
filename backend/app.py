@@ -35,17 +35,14 @@ def sanitize_input(data):
     Returns:
         The sanitized data, with special characters removed from strings.
     """
+
     if isinstance(data, dict):
-        # Recursively sanitize each key-value pair in the dictionary
         return {k: sanitize_input(v) for k, v in data.items()}
     elif isinstance(data, list):
-        # Recursively sanitize each item in the list
         return [sanitize_input(i) for i in data]
     elif isinstance(data, str):
-        # Remove special characters from the string
         return re.sub(r'[^\w\s]', '', data)
     else:
-        # Return data as is if it's neither dict, list, nor str
         return data
 
 def convert_object_ids(data):
@@ -56,17 +53,14 @@ def convert_object_ids(data):
     Returns:
         The data with ObjectId instances converted to strings.
     """
+
     if isinstance(data, dict):
-        # Recursively convert ObjectId in each key-value pair in the dictionary
         return {k: convert_object_ids(v) for k, v in data.items()}
     elif isinstance(data, list):
-        # Recursively convert ObjectId in each item in the list
         return [convert_object_ids(i) for i in data]
     elif isinstance(data, ObjectId):
-        # Convert ObjectId to string
         return str(data)
     else:
-        # Return data as is if it's neither dict, list, nor ObjectId
         return data
 
     
@@ -79,6 +73,7 @@ def overview():
     Review all collections and the count of documents in each one.
     Returns: JSON with the name of each collection and its document count.
     """
+
     collections = db.list_collection_names()
     overview_data = {}
     for collection_name in collections:
@@ -96,6 +91,7 @@ def list_all():
         - type (optional, default 'all'): Name of the collection to list. If not specified, lists all.
     Returns: JSON with the documents from the requested collections.
     """
+
     doc_type = request.args.get('type', 'all')
     result = {}
 
@@ -125,6 +121,7 @@ def search():
         - q (required): Search string.
     Returns: JSON with the search results by collection.
     """
+
     query = request.args.get('q', '')
     if not query:
         return jsonify({"error": "Query parameter is required"}), 400
@@ -152,6 +149,7 @@ def add_metadata():
         - JSON in the request body with the metadata/classification/tag data.
     Returns: Success or error message.
     """
+
     doc_type = request.args.get('type')
     doc_id = request.args.get('id')
     data = request.json
@@ -201,6 +199,7 @@ def remove():
         - JSON in the request body with the tag to remove (if applicable).
     Returns: Success or error message.
     """
+    
     doc_type = request.args.get('type')
     doc_id = request.args.get('id')
     data = request.json
