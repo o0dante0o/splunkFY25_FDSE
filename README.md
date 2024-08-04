@@ -3,13 +3,13 @@
 
 Design and build a customized Splunk solution to address real-world problems using Splunk tools. Develop a comprehensive architecture with data fetching, storage, custom REST API endpoints, and advanced search functionality. Showcase Splunk's capabilities through creative problem-solving, emphasizing user experience and efficient data handling.
 
-# ETL Feature Usage
+## ETL Feature Usage
 
-## Overview
+### Overview
 
 This ETL (Extract, Transform, Load) feature is designed to extract data from a Splunk Enterprise instance, transform the data by adding additional information, and load the processed data into a MongoDB Atlas database. The feature is divided into three main stages: extract, transform, and load, each implemented in separate modules.
 
-## File Structure
+### File Structure
 
 The ETL functionality is organized as follows:
 
@@ -31,7 +31,7 @@ etl/
 └── main.py
 ```
 
-## Prerequisites
+### Prerequisites
 
 Ensure you have the following installed and configured:
 
@@ -40,7 +40,7 @@ Ensure you have the following installed and configured:
 - MongoDB Atlas
 - A `.env` file with the necessary environment variables
 
-## Environment Variables
+### Environment Variables
 
 Create a `.env` file in the root directory of your project with the following variables:
 
@@ -54,7 +54,7 @@ MONGO_URI=<your_mongo_uri>
 MONGO_DB_NAME=<your_mongo_db_name>
 ```
 
-## Running ETL
+### Running ETL
 
 To run the ETL process, execute the `main.py` script:
 
@@ -62,11 +62,11 @@ To run the ETL process, execute the `main.py` script:
 python etl/main.py
 ```
 
-# Flask API Endpoints
+## Flask API Endpoints
 
 This project includes a Flask-based REST API to interact with the MongoDB database. Below are the details of each endpoint.
 
-### Overview Endpoint
+#### Overview Endpoint
 
 **GET `/overview`**
 
@@ -74,7 +74,7 @@ Review all collections and the count of documents in each one.
 
 **Returns:** JSON with the name of each collection and its document count.
 
-### List Documents
+#### List Documents
 
 **GET `/list`**
 
@@ -85,7 +85,7 @@ List all documents in all collections or in a specific collection.
 
 **Returns:** JSON with the documents from the requested collections.
 
-### Search Documents
+#### Search Documents
 
 **GET `/search`**
 
@@ -96,7 +96,7 @@ Search for a query across all collections.
 
 **Returns:** JSON with the search results by collection.
 
-### Add Metadata
+#### Add Metadata
 
 **POST `/add`**
 
@@ -109,7 +109,7 @@ Add metadata/classification or tags to a specific document in the specified coll
 
 **Returns:** Success or error message.
 
-### Remove Metadata or Document
+#### Remove Metadata or Document
 
 **POST `/remove`**
 
