@@ -62,7 +62,7 @@ To run the ETL process, execute the `main.py` script:
 python etl/main.py
 ```
 
-## Flask API Endpoints
+# Flask API Endpoints
 
 This project includes a Flask-based REST API to interact with the MongoDB database. Below are the details of each endpoint.
 
