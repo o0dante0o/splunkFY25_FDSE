@@ -1,5 +1,5 @@
 {
-  "name": "@splunk/my-react-repo",
+  "name": "@splunk/repo",
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
@@ -20,8 +20,5 @@
   ],
   "engines": {
     "node": ">=14"
-  },
-  "dependencies": {
-    "typesense": "^1.8.2"
   }
 }
