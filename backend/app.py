@@ -4,17 +4,18 @@ import os
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
 import re
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 load_dotenv()
 MONGO_URI = os.getenv('MONGO_URI')
 MONGO_DB_NAME = os.getenv('MONGO_DB_NAME')
-
+print(MONGO_URI)
+print(MONGO_DB_NAME)
 client = MongoClient(MONGO_URI)
 db = client[MONGO_DB_NAME]
-
-
 
 def validate_object_id(oid):
     """
