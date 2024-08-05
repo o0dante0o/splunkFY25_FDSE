@@ -1,9 +1,10 @@
-// Main.jsx
+// src/Main.jsx
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import AppRoutes from './Routes';
+import { GlobalProvider } from './GlobalState';
 
 const propTypes = {
     name: PropTypes.string,
@@ -11,12 +12,14 @@ const propTypes = {
 
 const Main = ({ name = 'User' }) => {
     return (
-        <BrowserRouter>
-            <div>
-                <Navbar />
-                <AppRoutes />
-            </div>
-        </BrowserRouter>
+        <GlobalProvider>
+            <BrowserRouter>
+                <div>
+                    <Navbar />
+                    <AppRoutes />
+                </div>
+            </BrowserRouter>
+        </GlobalProvider>
     );
 };
 
