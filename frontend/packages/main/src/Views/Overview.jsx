@@ -1,22 +1,65 @@
-// src/Views/Overview.jsx
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../GlobalState';
 
 const Overview = () => {
-    const { searchResults } = useContext(GlobalContext);
+    const { searchResults: searchContextResults } = useContext(GlobalContext);
+    const [initialData, setInitialData] = useState({});
+    const [searchResults, setSearchResults] = useState({});
+
+    useEffect(() => {
+        // Fetch initial data from API
+        const fetchData = async () => {
+            try {
+                const response = await fetch('https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/overview');
+                const data = await response.json();
+                setInitialData(data);
+                setSearchResults(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        // Update searchResults based on searchContextResults
+        if (Object.keys(searchContextResults).length > 0) {
+            setSearchResults(searchContextResults);
+        } else {
+            setSearchResults(initialData);
+        }
+    }, [searchContextResults, initialData]);
+
+    const renderValue = (key, value) => {
+        if (Array.isArray(value)) {
+            return (
+                <div>
+                    <strong>{key}</strong>: {value.length}
+                </div>
+            );
+        } else if (typeof value === 'object') {
+            return (
+                <ul>
+                    {Object.keys(value).map((subKey) => (
+                        <li key={subKey}>
+                            <strong>{subKey}</strong>: {JSON.stringify(value[subKey])}
+                        </li>
+                    ))}
+                </ul>
+            );
+        } else {
+            return value;
+        }
+    };
 
     return (
         <div>
             <h2>Overview</h2>
             <ul>
-                {Object.keys(searchResults).map((collection, index) => (
+                {Object.keys(searchResults).map((key, index) => (
                     <li key={index}>
-                        <strong>{collection}</strong>
-                        <ul>
-                            {searchResults[collection].map((result, idx) => (
-                                <li key={idx}>{JSON.stringify(result)}</li>
-                            ))}
-                        </ul>
+                        {renderValue(key, searchResults[key])}
                     </li>
                 ))}
             </ul>
