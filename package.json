@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@splunk/react-ui": "^4.33.0"
+  }
+}

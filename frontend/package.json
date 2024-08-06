@@ -20,5 +20,12 @@
   ],
   "engines": {
     "node": ">=14"
+  },
+  "dependencies": {
+    "@splunk/react-ui": "^4.33.0",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-loader-spinner": "^6.1.6",
+    "styled-components": "^5.3.11"
   }
 }
