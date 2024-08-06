@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../GlobalState';
 import Search from '@splunk/react-ui/Search';
 
-const SearchBar = () => {
+const SearchBarComponent = () => {
   const [query, setQuery] = useState('');
   const { setSearchResults } = useContext(GlobalContext);
 
@@ -33,4 +33,4 @@ const SearchBar = () => {
   );
 };
 
-export default SearchBar;
+export default SearchBarComponent;

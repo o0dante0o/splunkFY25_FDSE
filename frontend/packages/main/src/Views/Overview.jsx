@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../GlobalState';
+import CardComponent from '../Components/CardComponent';
 
 const Overview = () => {
     const { searchResults: searchContextResults } = useContext(GlobalContext);
@@ -10,7 +11,9 @@ const Overview = () => {
         // Fetch initial data from API
         const fetchData = async () => {
             try {
-                const response = await fetch('https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/overview');
+                const response = await fetch(
+                    'https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/overview'
+                );
                 const data = await response.json();
                 setInitialData(data);
                 setSearchResults(data);
@@ -33,29 +36,23 @@ const Overview = () => {
 
     const renderValue = (key, value) => {
         if (Array.isArray(value)) {
-            return (
-                <div>
-                    <strong>{key}</strong>: {value.length}
-                </div>
-            );
+            return `${value.length} items`;
         } else if (typeof value === 'object') {
-            return (
-                <div>
-                    <strong>{key}</strong>: {Object.keys(value).length}
-                </div>
-            );
+            return `${Object.keys(value).length}`;
         } else {
-            return (
-                <div>
-                    <strong>{key}</strong>: {value}
-                </div>
-            );
+            return value;
         }
     };
 
     return (
-        <div>
-            
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
+            {Object.keys(searchResults).map((key, index) => (
+                <CardComponent
+                    key={index}
+                    keyProp={key}
+                    value={renderValue(key, searchResults[key])}
+                />
+            ))}
         </div>
     );
 };

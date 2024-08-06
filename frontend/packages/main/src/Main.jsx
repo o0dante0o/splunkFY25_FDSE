@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter } from 'react-router-dom';
-import Navbar from './Components/Navbar';
+import Navbar from './Components/NavbarComponent';
 import AppRoutes from './Routes';
 import { GlobalProvider } from './GlobalState';
 
