@@ -65,26 +65,25 @@ const TableComponent = ({ data, columns, kindValues }) => {
                 </Table.Head>
                 <Table.Body>
                     {paginatedData.map((row) => (
-                        <Table.Row key={row._id} style={{ maxWidth: '200px' }}>
+                        <Table.Row key={row._id} style={{ maxWidth: '100px' }}>
                             <Table.Cell>{row.kind}</Table.Cell>
                             {columns.map((col) => (
                                 <Table.Cell
                                     key={col}
-                                    style={{ maxHeight: '50px', overflow: 'hidden' }}
+                                    style={{ maxHeight: '10px', overflow: 'hidden' }}
                                 >
                                     {col === 'custom_classification' ? (
                                         <CustomClassificationComponent
                                             id={row._id}
                                             initialClassification={row.custom_classification}
                                         />
+                                    ) : col === 'tags' ? (
+                                        <TagsComponent id={row._id} tags={row.tags} />
                                     ) : (
                                         row[col]
                                     )}
                                 </Table.Cell>
                             ))}
-                            <Table.Cell>
-                                <TagsComponent id={row._id} tags={row.tags} />
-                            </Table.Cell>
                         </Table.Row>
                     ))}
                 </Table.Body>
