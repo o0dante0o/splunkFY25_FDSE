@@ -1,6 +1,7 @@
 // src/Components/SearchBar.jsx
 import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../GlobalState';
+import Search from '@splunk/react-ui/Search';
 
 const SearchBar = () => {
   const [query, setQuery] = useState('');
@@ -27,12 +28,7 @@ const SearchBar = () => {
 
   return (
     <div>
-      <input
-        type="text"
-        value={query}
-        onChange={handleSearch}
-        placeholder="Search..."
-      />
+      <Search inline onChange={handleSearch} value={query} />
     </div>
   );
 };

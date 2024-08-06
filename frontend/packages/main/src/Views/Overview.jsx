@@ -40,29 +40,22 @@ const Overview = () => {
             );
         } else if (typeof value === 'object') {
             return (
-                <ul>
-                    {Object.keys(value).map((subKey) => (
-                        <li key={subKey}>
-                            <strong>{subKey}</strong>: {JSON.stringify(value[subKey])}
-                        </li>
-                    ))}
-                </ul>
+                <div>
+                    <strong>{key}</strong>: {Object.keys(value).length}
+                </div>
             );
         } else {
-            return value;
+            return (
+                <div>
+                    <strong>{key}</strong>: {value}
+                </div>
+            );
         }
     };
 
     return (
         <div>
-            <h2>Overview</h2>
-            <ul>
-                {Object.keys(searchResults).map((key, index) => (
-                    <li key={index}>
-                        {renderValue(key, searchResults[key])}
-                    </li>
-                ))}
-            </ul>
+            
         </div>
     );
 };

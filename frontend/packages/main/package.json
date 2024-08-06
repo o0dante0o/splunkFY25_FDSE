@@ -20,7 +20,7 @@
   },
   "main": "Main.js",
   "dependencies": {
-    "@splunk/react-ui": "^4.30.0",
+    "@splunk/react-ui": "^4.33.0",
     "@splunk/themes": "^0.18.0",
     "react-router-dom": "^6.26.0",
     "typesense": "^1.8.2"
