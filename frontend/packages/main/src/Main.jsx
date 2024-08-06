@@ -1,23 +1,40 @@
-// src/Main.jsx
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useLocation } from 'react-router-dom';
 import Navbar from './Components/NavbarComponent';
 import AppRoutes from './Routes';
-import { GlobalProvider } from './GlobalState';
+import { GlobalProvider, GlobalContext } from './GlobalState';
+import FetchDataComponent from './FetchData';
 
 const propTypes = {
     name: PropTypes.string,
+};
+
+const MainContent = () => {
+    const location = useLocation();
+    const { setCurrentPath, searchResults, initialData, currentPath } = useContext(GlobalContext);
+
+    useEffect(() => {
+        setCurrentPath(location.pathname);
+        console.log('Current Location:', location.pathname);
+    }, [location, setCurrentPath]);
+
+    useEffect(() => {}, [currentPath, searchResults, initialData]);
+
+    return (
+        <div>
+            <Navbar />
+            <AppRoutes />
+            <FetchDataComponent />
+        </div>
+    );
 };
 
 const Main = ({ name = 'User' }) => {
     return (
         <GlobalProvider>
             <BrowserRouter>
-                <div>
-                    <Navbar />
-                    <AppRoutes />
-                </div>
+                <MainContent />
             </BrowserRouter>
         </GlobalProvider>
     );
