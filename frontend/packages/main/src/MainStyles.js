@@ -5,7 +5,7 @@ const StyledContainer = styled.div`
     ${mixins.reset('inline-block')};
     font-size: ${variables.fontSizeLarge};
     line-height: 200%;
-    margin: ${variables.spacing} ${variables.spacingHalf};
+    margin: ${variables.spacing} ${variables.spacingHalf};get_theme
     padding: ${variables.spacing} ${variables.spacingXXLarge};
     border-radius: ${variables.borderRadius};
     box-shadow: ${variables.overlayShadow};
