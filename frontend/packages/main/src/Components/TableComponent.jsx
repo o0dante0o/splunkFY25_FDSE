@@ -1,10 +1,13 @@
+// TableComponent.js
 import React, { useState, useCallback } from 'react';
 import Filter from '@splunk/react-icons/enterprise/Filter';
 import Menu from '@splunk/react-ui/Menu';
 import Table from '@splunk/react-ui/Table';
 import Paginator from '@splunk/react-ui/Paginator';
-import TagsComponent from './TagsComponent'; // Asegúrate de importar el nuevo componente
-import CustomClassificationComponent from './CustomClassificationComponent'; // Importar el nuevo componente
+import Tooltip from '@splunk/react-ui/Tooltip';
+import TagsComponent from './TagsComponent';
+import CustomClassificationComponent from './CustomClassificationComponent';
+import ActionsComponent from './ActionsComponent'; // Importar el nuevo componente
 
 const TableComponent = ({ data, columns, kindValues }) => {
     const [filter, setFilter] = useState([]);
@@ -23,6 +26,17 @@ const TableComponent = ({ data, columns, kindValues }) => {
         setCurrentPage(page);
     };
 
+    const truncateText = (text, length = 20) => {
+        if (!text) return '';
+        if (text.length <= length) return text;
+        return text.substring(0, length) + '...';
+    };
+
+    const capitalize = (str) => {
+        if (typeof str !== 'string') return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+
     const filteredData = data.filter((row) => filter.length === 0 || filter.includes(row.kind));
     const paginatedData = filteredData.slice(
         (currentPage - 1) * rowsPerPage,
@@ -37,7 +51,6 @@ const TableComponent = ({ data, columns, kindValues }) => {
                         label={
                             <>
                                 <Filter size={1.5} />
-                                Kind
                                 {filter.length > 0 ? ` ${filter.length}/${kindValues.length}` : ''}
                             </>
                         }
@@ -60,8 +73,9 @@ const TableComponent = ({ data, columns, kindValues }) => {
                         </Menu>
                     </Table.HeadDropdownCell>
                     {columns.map((col) => (
-                        <Table.HeadCell key={col}>{col}</Table.HeadCell>
+                        <Table.HeadCell key={col}>{capitalize(col)}</Table.HeadCell>
                     ))}
+                    <Table.HeadCell>Actions</Table.HeadCell>
                 </Table.Head>
                 <Table.Body>
                     {paginatedData.map((row) => (
@@ -80,10 +94,15 @@ const TableComponent = ({ data, columns, kindValues }) => {
                                     ) : col === 'tags' ? (
                                         <TagsComponent id={row._id} tags={row.tags} />
                                     ) : (
-                                        row[col]
+                                        <Tooltip content={row[col]}>
+                                            {truncateText(row[col], 30)}
+                                        </Tooltip>
                                     )}
                                 </Table.Cell>
                             ))}
+                            <Table.Cell>
+                                <ActionsComponent row={row} />
+                            </Table.Cell>
                         </Table.Row>
                     ))}
                 </Table.Body>

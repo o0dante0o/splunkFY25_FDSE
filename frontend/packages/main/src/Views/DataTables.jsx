@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../GlobalState';
-import TableComponent from '../Components/TableComponent';
-
+import FilterableTable from '';
+import Table from '../Components/TableComponent';
 const DataTables = () => {
     const { searchResults: searchContextResults, currentPath } = useContext(GlobalContext);
     const [initialData, setInitialData] = useState({});
@@ -61,13 +61,7 @@ const DataTables = () => {
 
     const columns = ['name', 'description', 'owner', 'custom_classification', 'tags'];
 
-    return (
-        <TableComponent
-            data={transformedData}
-            columns={columns}
-            kindValues={Object.keys(to_render)}
-        />
-    );
+    return <Table data={transformedData} columns={columns} kindValues={Object.keys(to_render)} />;
 };
 
 export default DataTables;

@@ -67,7 +67,6 @@ function Loading() {
     return (
         <div style={{ width: '300px' }}>
             {' '}
-            {/* Ajusta el tamaño aquí */}
             <Search value={value} inline onChange={handleChange} isLoadingOptions={isLoading}>
                 {searchOptions}
             </Search>

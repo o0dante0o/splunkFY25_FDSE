@@ -11,6 +11,11 @@ const CardComponent = ({ keyProp, value }) => {
         e.currentTarget.style.color = '#000000'; // Original text color
     };
 
+    const capitalize = (str) => {
+        if (typeof str !== 'string') return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+
     const renderValue = (value) => {
         if (Array.isArray(value)) {
             return value.join(', ');
@@ -52,7 +57,7 @@ const CardComponent = ({ keyProp, value }) => {
             onMouseLeave={handleMouseLeave}
         >
             <div style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '10px' }}>
-                {keyProp}
+                {capitalize(keyProp)}
             </div>
             <div style={{ fontSize: '20px' }}>{renderValue(value)}</div>
         </div>
