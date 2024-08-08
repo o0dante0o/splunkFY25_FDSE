@@ -28,7 +28,7 @@ const Overview = () => {
     }, []);
 
     useEffect(() => {
-        // Update searchResults based on searchContextResults
+
         if (Object.keys(searchContextResults).length > 0) {
             setSearchResults(searchContextResults);
         } else {
