@@ -121,3 +121,69 @@ Remove a tag or an entire document from the specified collection.
 - JSON in the request body with the tag to remove (if applicable).
 
 **Returns:** Success or error message.
+# Let's create the README file with the provided information
+
+# splunkFY25_FDSE_Front_end
+
+## Description
+
+This project is a data visualization application built with React. The application allows users to interact with various components to explore and analyze data.
+
+## Project Structure
+
+The project is composed of several React components, each with specific functionalities:
+
+- **ActionsComponent.jsx**: (Component) Handles user actions (delete and share).
+- **CardComponent.jsx**: (Component) Displays information in a card format.
+- **CustomClassificationComponent.jsx**: (Component) Allows to change classification.
+- **NavbarComponent.jsx**: (Component) Navigation bar for the application.
+- **SearchBarComponent.jsx**: (Component) Search bar to filter data.
+- **TableComponent.jsx**: (Component) Displays data in a table format.
+- **TagsComponent.jsx**: (Component) Manages and displays tags.
+- **DataTables.jsx**: (View) Manages and visualizes data tables.
+- **Overview.jsx**: (View) Provides an overview of the data with counts of each collection.
+- **Visualizations.jsx**: (View) Generates graphs and visualizations for data analysis.
+- **FetchData.jsx**: Fetches data from an API and updates the global state.
+- **GlobalState.jsx**: Manages global state using React Context API.
+- **Main.jsx**: Main entry point of the application, integrates all components and routes.
+- **Routes.jsx**: Defines the application routes.
+
+## Installation
+
+## Installation
+
+To install and run the project locally, follow these steps:
+
+1. Clone this repository:
+    ```bash
+    git clone https://github.com/your_username/your_repository.git
+    ```
+2. Navigate to the project directory:
+    ```bash
+    cd your_repository/frontend
+    ```
+3. Install the dependencies using Yarn:
+    ```bash
+    yarn install
+    ```
+4. Build the project:
+    ```bash
+    yarn run build
+    ```
+5. Link the application with your local Splunk installation:
+    ```bash
+    yarn run link:app
+    ```
+    Ensure that `$SPLUNK_HOME` is set to the installation directory of your local Splunk instance.
+6. Start the application in watch mode:
+    ```bash
+    yarn run start
+    ```
+    Make sure to restart Splunk to pick up the new application. After restarting, the app will be available at `http://localhost:8000/en-US/app/your_app_name/start`.
+   
+## Contact
+
+For any questions or suggestions, please contact [j.a@a-vision.co](mailto:j.a@a-vision.co).
+"""
+
+
