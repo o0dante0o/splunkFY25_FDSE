@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import Search from '@splunk/react-ui/Search';
-import { GlobalContext } from '../GlobalState'; // Asegúrate de importar tu contexto global
+import { GlobalContext } from '../GlobalState'; 
 
 function Loading() {
     const { setSearchResults } = useContext(GlobalContext);
@@ -20,7 +20,7 @@ function Loading() {
                 if (response.ok) {
                     const searchResults = await response.json();
                     if (fetchOptions.current) {
-                        // Check if the component is still mounted
+                        
                         setOptions(searchResults);
                         setSearchResults(searchResults);
                         setIsLoading(false);
@@ -67,9 +67,8 @@ function Loading() {
     return (
         <div style={{ width: '300px' }}>
             {' '}
-            {/* Ajusta el tamaño aquí */}
             <Search value={value} inline onChange={handleChange} isLoadingOptions={isLoading}>
-                {searchOptions}
+                
             </Search>
         </div>
     );

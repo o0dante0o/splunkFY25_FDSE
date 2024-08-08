@@ -17,6 +17,8 @@ const Overview = () => {
                 const data = await response.json();
                 setInitialData(data);
                 setSearchResults(data);
+                console.log('Initial data:', data);
+                console.log('Search results:', searchResults);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../GlobalState';
-import TableComponent from '../Components/TableComponent';
+import Table from '../Components/TableComponent';
 
 const DataTables = () => {
     const { searchResults: searchContextResults, currentPath } = useContext(GlobalContext);
@@ -8,15 +8,16 @@ const DataTables = () => {
     const [searchResults, setSearchResults] = useState({});
 
     useEffect(() => {
-        // Fetch initial data from API
         const fetchData = async () => {
             try {
                 const response = await fetch(
                     'https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/list?type=all'
                 );
                 const data = await response.json();
-                setInitialData(data);
                 setSearchResults(data);
+                setInitialData(data);
+                console.log('Initial data:', data);
+                console
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -49,6 +50,49 @@ const DataTables = () => {
         return filteredResults;
     };
 
+    const handleDelete = (id) => {
+        setSearchResults((prevData) => 
+            Object.keys(prevData).reduce((result, key) => {
+                result[key] = prevData[key].filter((item) => item._id !== id);
+                return result;
+            }, {})
+        );
+    };
+
+    const handleUpdate = (id, classification) => {
+        setSearchResults((prevData) => 
+            Object.keys(prevData).reduce((result, key) => {
+                result[key] = prevData[key].map((item) => {
+                    if (item._id === id) {
+                        return {
+                            ...item,
+                            custom_classification: classification,
+                        };
+                    }
+                    return item;
+                });
+                return result;
+            }, {})
+        );
+
+    }
+    const handleUpdateTags = (id, tags) => {
+        setSearchResults((prevData) => 
+            Object.keys(prevData).reduce((result, key) => {
+                result[key] = prevData[key].map((item) => {
+                    if (item._id === id) {
+                        return {
+                            ...item,
+                            tags: tags,
+                        };
+                    }
+                    return item;
+                });
+                return result;
+            }, {})
+        );
+    }
+
     const to_render = renderFilteredResults();
     console.log('DataTables:', to_render);
 
@@ -62,10 +106,13 @@ const DataTables = () => {
     const columns = ['name', 'description', 'owner', 'custom_classification', 'tags'];
 
     return (
-        <TableComponent
-            data={transformedData}
-            columns={columns}
-            kindValues={Object.keys(to_render)}
+        <Table 
+            data={transformedData} 
+            columns={columns} 
+            kindValues={Object.keys(to_render)} 
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
+            onUpdateTags={handleUpdateTags}
         />
     );
 };

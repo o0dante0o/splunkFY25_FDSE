@@ -10,9 +10,7 @@ getUserTheme()
     .then((theme) => {
         layout(
             <StyledContainer>
-                <StyledGreeting>Hello, from inside App!</StyledGreeting>
-                <div>Your component will appear below.</div>
-                <Main name="from inside Main" />
+                <Main />
             </StyledContainer>,
             {
                 theme,
