@@ -152,9 +152,9 @@ The project is composed of several React components, each with specific function
 To install and run the project locally, follow these steps:
 
 1. Clone this repository:
-    ```bash
+
     [git clone https://github.com/your_username/your_repository.git](https://github.com/o0dante0o/splunkFY25_FDSE.git)
-    ```
+
 2. Navigate to the project directory:
     ```bash
     cd your_repository/frontend
@@ -181,6 +181,5 @@ To install and run the project locally, follow these steps:
 ## Contact
 
 For any questions or suggestions, please contact [j.a@a-vision.co](mailto:j.a@a-vision.co).
-"""
 
 
