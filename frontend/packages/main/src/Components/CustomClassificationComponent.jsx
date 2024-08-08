@@ -27,8 +27,30 @@ const CustomClassificationComponent = ({ id, initialClassification, onUpdate }) 
             });
     };
 
+    const getColorForClassification = (classification) => {
+        switch (classification) {
+            case 'TopSecret/SCI':
+                return { color: 'darkred', backgroundColor: '#ffcccc' };
+            case 'TopSecret':
+                return { color: 'darkred', backgroundColor: '#ff9999' };
+            case 'Secret':
+                return { color: 'orange', backgroundColor: '#ffe6cc' };
+            case 'Confidential':
+                return { color: 'blue', backgroundColor: '#cce6ff' };
+            case 'Unclassified':
+                return { color: 'green', backgroundColor: '#ccffcc' };
+            default:
+                return { color: 'black', backgroundColor: 'white' };
+        }
+    };
+
     const toggle = (
-        <Button appearance="toggle" label={classification || 'Select Classification'} isMenu />
+        <Button 
+            appearance="toggle" 
+            label={classification || 'Select Classification'} 
+            isMenu 
+            style={getColorForClassification(classification)}
+        />
     );
 
     return (
@@ -38,6 +60,7 @@ const CustomClassificationComponent = ({ id, initialClassification, onUpdate }) 
                     label="TopSecret/SCI"
                     value="TopSecret/SCI"
                     onClick={() => handleSelect('TopSecret/SCI')}
+                    style={getColorForClassification('TopSecret/SCI')}
                 >
                     TopSecret/SCI
                 </Menu.Item>
@@ -45,16 +68,23 @@ const CustomClassificationComponent = ({ id, initialClassification, onUpdate }) 
                     label="TopSecret"
                     value="TopSecret"
                     onClick={() => handleSelect('TopSecret')}
+                    style={getColorForClassification('TopSecret')}
                 >
                     TopSecret
                 </Menu.Item>
-                <Menu.Item label="Secret" value="Secret" onClick={() => handleSelect('Secret')}>
+                <Menu.Item
+                    label="Secret"
+                    value="Secret"
+                    onClick={() => handleSelect('Secret')}
+                    style={getColorForClassification('Secret')}
+                >
                     Secret
                 </Menu.Item>
                 <Menu.Item
                     label="Confidential"
                     value="Confidential"
                     onClick={() => handleSelect('Confidential')}
+                    style={getColorForClassification('Confidential')}
                 >
                     Confidential
                 </Menu.Item>
@@ -62,6 +92,7 @@ const CustomClassificationComponent = ({ id, initialClassification, onUpdate }) 
                     label="Unclassified"
                     value="Unclassified"
                     onClick={() => handleSelect('Unclassified')}
+                    style={getColorForClassification('Unclassified')}
                 >
                     Unclassified
                 </Menu.Item>

@@ -14,8 +14,10 @@ const DataTables = () => {
                     'https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/list?type=all'
                 );
                 const data = await response.json();
-                setInitialData(data);
                 setSearchResults(data);
+                setInitialData(data);
+                console.log('Initial data:', data);
+                console
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -72,6 +74,7 @@ const DataTables = () => {
                 return result;
             }, {})
         );
+
     }
     const handleUpdateTags = (id, tags) => {
         setSearchResults((prevData) => 
