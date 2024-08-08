@@ -51,7 +51,7 @@ const CardComponent = ({ keyProp, value }) => {
                 boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 transition: 'background-color 0.3s ease',
                 cursor: 'pointer',
-                overflowY: 'auto', // To handle overflow if content is large
+                overflowY: 'auto',
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}

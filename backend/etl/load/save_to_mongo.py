@@ -27,6 +27,7 @@ def create_indexes(db, collection_name):
     print(f'Text indexes created for {collection_name} collection')
 
 def save_to_mongo(collection_name, data_list):
+    print(data_list)
     """
     Saves a list of dictionaries to a specified MongoDB collection.
 

@@ -12,14 +12,16 @@ class TagsComponent extends Component {
     }
 
     handleChange = (e, { values }) => {
-        const { id } = this.props;
+        const { id, onUpdateTags } = this.props;
         const newTags = values.filter((tag) => !this.state.tags.includes(tag));
         const removedTags = this.state.tags.filter((tag) => !values.includes(tag));
 
         newTags.forEach((tag) => this.addTag(id, tag));
         removedTags.forEach((tag) => this.removeTag(id, tag));
 
-        this.setState({ tags: values });
+        this.setState({ tags: values }, () => {
+            onUpdateTags(id, values);
+        });
     };
 
     addTag = (id, tag) => {

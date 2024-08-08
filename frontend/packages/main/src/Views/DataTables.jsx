@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../GlobalState';
-import FilterableTable from '';
 import Table from '../Components/TableComponent';
+
 const DataTables = () => {
     const { searchResults: searchContextResults, currentPath } = useContext(GlobalContext);
     const [initialData, setInitialData] = useState({});
     const [searchResults, setSearchResults] = useState({});
 
     useEffect(() => {
-        // Fetch initial data from API
         const fetchData = async () => {
             try {
                 const response = await fetch(
@@ -49,6 +48,48 @@ const DataTables = () => {
         return filteredResults;
     };
 
+    const handleDelete = (id) => {
+        setSearchResults((prevData) => 
+            Object.keys(prevData).reduce((result, key) => {
+                result[key] = prevData[key].filter((item) => item._id !== id);
+                return result;
+            }, {})
+        );
+    };
+
+    const handleUpdate = (id, classification) => {
+        setSearchResults((prevData) => 
+            Object.keys(prevData).reduce((result, key) => {
+                result[key] = prevData[key].map((item) => {
+                    if (item._id === id) {
+                        return {
+                            ...item,
+                            custom_classification: classification,
+                        };
+                    }
+                    return item;
+                });
+                return result;
+            }, {})
+        );
+    }
+    const handleUpdateTags = (id, tags) => {
+        setSearchResults((prevData) => 
+            Object.keys(prevData).reduce((result, key) => {
+                result[key] = prevData[key].map((item) => {
+                    if (item._id === id) {
+                        return {
+                            ...item,
+                            tags: tags,
+                        };
+                    }
+                    return item;
+                });
+                return result;
+            }, {})
+        );
+    }
+
     const to_render = renderFilteredResults();
     console.log('DataTables:', to_render);
 
@@ -61,7 +102,16 @@ const DataTables = () => {
 
     const columns = ['name', 'description', 'owner', 'custom_classification', 'tags'];
 
-    return <Table data={transformedData} columns={columns} kindValues={Object.keys(to_render)} />;
+    return (
+        <Table 
+            data={transformedData} 
+            columns={columns} 
+            kindValues={Object.keys(to_render)} 
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
+            onUpdateTags={handleUpdateTags}
+        />
+    );
 };
 
 export default DataTables;

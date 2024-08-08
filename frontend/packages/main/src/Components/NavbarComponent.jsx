@@ -48,6 +48,11 @@ const NavbarComponent = ({ setResults }) => {
                     //icon={<Table screenReaderText={null} />}
                     tabId="/knowledge-objects"
                 />
+                <TabBar.Tab
+                    label="Visualizations "
+                    //icon={<Table screenReaderText={null} />}
+                    tabId="/visualizations "
+                />
             </TabBar>
             <SearchBar setResults={setResults} />
         </div>

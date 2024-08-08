@@ -4,7 +4,7 @@ import Dropdown from '@splunk/react-ui/Dropdown';
 import Menu from '@splunk/react-ui/Menu';
 import axios from 'axios';
 
-const CustomClassificationComponent = ({ id, initialClassification }) => {
+const CustomClassificationComponent = ({ id, initialClassification, onUpdate }) => {
     const [classification, setClassification] = useState(initialClassification);
 
     const handleSelect = (value) => {
@@ -20,6 +20,7 @@ const CustomClassificationComponent = ({ id, initialClassification }) => {
             )
             .then((response) => {
                 console.log('Classification updated:', response.data);
+                onUpdate(id, classification); // Ensure handleUpdate is called here
             })
             .catch((error) => {
                 console.error('Error updating classification:', error);

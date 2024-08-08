@@ -17,6 +17,7 @@ const ActionsComponent = ({ row, onDelete }) => {
         );
         if (response.ok) {
             alert('Deleted successfully ' + row._id);
+            onDelete(row._id);
         } else {
             alert(`Failed to delete ${row._id}`);
         }

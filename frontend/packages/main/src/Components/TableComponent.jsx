@@ -1,4 +1,3 @@
-// TableComponent.js
 import React, { useState, useCallback } from 'react';
 import Filter from '@splunk/react-icons/enterprise/Filter';
 import Menu from '@splunk/react-ui/Menu';
@@ -7,9 +6,11 @@ import Paginator from '@splunk/react-ui/Paginator';
 import Tooltip from '@splunk/react-ui/Tooltip';
 import TagsComponent from './TagsComponent';
 import CustomClassificationComponent from './CustomClassificationComponent';
-import ActionsComponent from './ActionsComponent'; // Importar el nuevo componente
+import Button from '@splunk/react-ui/Button';
+import TrashCanCross from '@splunk/react-icons/TrashCanCross';
+import Clipboard from '@splunk/react-icons/Clipboard';
 
-const TableComponent = ({ data, columns, kindValues }) => {
+const TableComponent = ({ data, columns, kindValues, onDelete, onUpdate, onUpdateTags }) => {
     const [filter, setFilter] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 10;
@@ -43,6 +44,29 @@ const TableComponent = ({ data, columns, kindValues }) => {
         currentPage * rowsPerPage
     );
 
+    const handleDelete = async (row) => {
+        const response = await fetch(
+            `https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/remove?type=remove_document&id=${row._id}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: row._id }),
+            }
+        );
+        if (response.ok) {
+            onDelete(row._id); 
+        } else {
+            alert(`Failed to delete ${row._id}`);
+        }
+    };
+
+    const handleShare = (row) => {
+        const jsonString = JSON.stringify(row, null, 2);
+        navigator.clipboard.writeText(jsonString);
+    };
+
     return (
         <>
             <Table stripeRows>
@@ -75,7 +99,9 @@ const TableComponent = ({ data, columns, kindValues }) => {
                     {columns.map((col) => (
                         <Table.HeadCell key={col}>{capitalize(col)}</Table.HeadCell>
                     ))}
-                    <Table.HeadCell>Actions</Table.HeadCell>
+
+                    <Table.HeadCell>Options</Table.HeadCell>
+
                 </Table.Head>
                 <Table.Body>
                     {paginatedData.map((row) => (
@@ -90,9 +116,14 @@ const TableComponent = ({ data, columns, kindValues }) => {
                                         <CustomClassificationComponent
                                             id={row._id}
                                             initialClassification={row.custom_classification}
+                                            onUpdate={onUpdate}
                                         />
                                     ) : col === 'tags' ? (
-                                        <TagsComponent id={row._id} tags={row.tags} />
+                                        <TagsComponent 
+                                            id={row._id} 
+                                            tags={row.tags}
+                                            onUpdateTags={onUpdateTags}
+                                        />
                                     ) : (
                                         <Tooltip content={row[col]}>
                                             {truncateText(row[col], 30)}
@@ -101,7 +132,13 @@ const TableComponent = ({ data, columns, kindValues }) => {
                                 </Table.Cell>
                             ))}
                             <Table.Cell>
-                                <ActionsComponent row={row} />
+                                <Button
+                                    appearance="primary"
+                                    style={{ backgroundColor: 'red', color: 'white' }}
+                                    icon={<TrashCanCross />}
+                                    onClick={() => handleDelete(row)}
+                                />
+                                <Button icon={<Clipboard />} onClick={() => handleShare(row)} />
                             </Table.Cell>
                         </Table.Row>
                     ))}
