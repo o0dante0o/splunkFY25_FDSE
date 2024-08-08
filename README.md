@@ -144,9 +144,7 @@ The project is composed of several React components, each with specific function
 - **GlobalState.jsx**: Manages global state using React Context API.
 - **Main.jsx**: Main entry point of the application, integrates all components and routes.
 - **Routes.jsx**: Defines the application routes.
-
-## Installation
-
+- 
 ## Installation
 
 To install and run the project locally, follow these steps:
