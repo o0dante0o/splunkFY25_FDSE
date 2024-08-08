@@ -120,9 +120,6 @@ Remove a tag or an entire document from the specified collection.
 - `id` (required): ID of the document to update or delete.
 - JSON in the request body with the tag to remove (if applicable).
 
-**Returns:** Success or error message.
-# Let's create the README file with the provided information
-
 # splunkFY25_FDSE_Front_end
 
 ## Description
