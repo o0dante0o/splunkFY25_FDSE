@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TabBar from '@splunk/react-ui/TabBar';
-import SearchBar from './SearchBarComponent';
+import SearchBar from './searchBarComponentTS';
 import Dashboard from '@splunk/react-icons/enterprise/Dashboard';
 import Table from '@splunk/react-icons/enterprise/Table';
 

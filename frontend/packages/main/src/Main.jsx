@@ -17,7 +17,10 @@ const MainContent = () => {
     useEffect(() => {
         setCurrentPath(location.pathname);
         console.log('Current Location:', location.pathname);
-    }, [location, setCurrentPath]);
+        console.log('Initial Data ======================\n\n\n',initialData, '\n\n\n Initial Data ======================');	
+        console.log('Search Results ======================\n\n\n', searchResults, '\n\n\n Search Results ======================');
+    }, 
+    [location, setCurrentPath]);
 
     useEffect(() => {}, [currentPath, searchResults, initialData]);
 
