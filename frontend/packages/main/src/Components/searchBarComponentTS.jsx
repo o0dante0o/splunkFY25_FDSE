@@ -33,10 +33,9 @@ function Loading() {
                 };
 
                 let allResults = [];
-                // Predefinir las colecciones en las que buscar
+
                 const collections = ['sources', 'reports', 'lookups', 'index', 'fields', 'dashboards', 'apps', 'alerts'];
 
-                // Realizar la búsqueda en cada colección predefinida
                 for (const collectionName of collections) {
                     try {
                         const searchResults = await typesense
