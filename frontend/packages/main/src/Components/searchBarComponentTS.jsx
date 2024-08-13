@@ -31,11 +31,22 @@ function Loading() {
                     q: searchValue,
                     query_by: 'name,description,owner',
                 };
-
-                let allResults = [];
+    
                 // Predefinir las colecciones en las que buscar
                 const collections = ['sources', 'reports', 'lookups', 'index', 'fields', 'dashboards', 'apps', 'alerts'];
-
+    
+                // Inicializar un objeto para almacenar los resultados por colección
+                let allResults = {
+                    sources: [],
+                    reports: [],
+                    lookups: [],
+                    index: [],
+                    fields: [],
+                    dashboards: [],
+                    apps: [],
+                    alerts: []
+                };
+    
                 // Realizar la búsqueda en cada colección predefinida
                 for (const collectionName of collections) {
                     try {
@@ -43,19 +54,27 @@ function Loading() {
                             .collections(collectionName)
                             .documents()
                             .search(searchParameters);
-
+    
                         const results = searchResults.hits.map((hit) => hit.document);
-                        allResults = [...allResults, ...results];
+                        allResults[collectionName] = results; // Almacenar los resultados en su respectiva colección
                     } catch (searchError) {
                         console.error(`Error searching in collection ${collectionName}:`, searchError);
                     }
                 }
-
+    
+                // Filtrar las colecciones que tienen resultados (listas no vacías)
+                const filteredResults = Object.keys(allResults)
+                    .filter(key => allResults[key].length > 0)
+                    .reduce((obj, key) => {
+                        obj[key] = allResults[key];
+                        return obj;
+                    }, {});
+    
                 if (fetchOptions.current) {
                     // Check if the component is still mounted
-                    console.log('Search Results:', allResults);
-                    setOptions(allResults);
-                    setSearchResults(allResults);
+                    console.log('Filtered Search Results:', filteredResults);
+                    setOptions(filteredResults);
+                    setSearchResults(filteredResults); // Almacenar los resultados filtrados
                     setIsLoading(false);
                 }
             } catch (error) {
@@ -67,6 +86,7 @@ function Loading() {
             setSearchResults([]);
         }
     };
+    
 
     const generateOptions = () => {
         if (isLoading) {

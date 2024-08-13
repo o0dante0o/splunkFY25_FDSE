@@ -21,6 +21,7 @@ function Loading() {
                     const searchResults = await response.json();
                     if (fetchOptions.current) {
                         
+                        console.log('Search Results:', searchResults);
                         setOptions(searchResults);
                         setSearchResults(searchResults);
                         setIsLoading(false);
