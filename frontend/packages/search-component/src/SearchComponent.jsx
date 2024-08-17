@@ -26,6 +26,9 @@ function SearchComponent() {
     const handleFetch = async (searchValue = '') => {
         setValue(searchValue);
         if (searchValue.length > 2) {
+            console.log('Searching for:', searchValue);
+            console.log('Search Options:', options);
+            console.log('value', value);
             setIsLoading(true);
             try {
                 const searchParameters = {
@@ -77,10 +80,11 @@ function SearchComponent() {
             } catch (error) {
                 console.error('Error fetching search results:', error);
                 setIsLoading(false);
+                setSearchResults([]); // Set global state to empty list on error
             }
         } else {
             setOptions([]);
-            setSearchResults([]);
+            setSearchResults([]); // Set global state to empty list if search value is too short
         }
     };
 
