@@ -9,7 +9,7 @@ export const GlobalProvider = ({ children }) => {
     const [state, setState] = useState({});
     const [searchResults, setSearchResults] = useState(null); // Añadir searchResults al estado global
     const location = useLocation();
-
+    console.log('location', location);
     useEffect(() => {
         const fetchInitialData = async () => {
             try {

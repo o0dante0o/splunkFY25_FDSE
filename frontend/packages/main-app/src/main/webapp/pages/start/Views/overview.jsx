@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { GlobalContext } from '@splunk/global-state'; // Asegúrate de que la ruta sea correcta
 import CardComponent from '@splunk/card-component'; // Asegúrate de que la ruta sea correcta
 import PlotComponent from '@splunk/plot-component'; // Asegúrate de que la ruta sea correcta
+
 const Overview = () => {
     const { state, searchResults } = useContext(GlobalContext);
     const { overview, currentPath } = state;
@@ -12,9 +13,22 @@ const Overview = () => {
 
     const isFromSearchResults = searchResults && Object.keys(searchResults).length > 0;
 
+    if (!currentPath) {
+        return null; // No renderizar nada hasta que currentPath esté definido
+    }
+
     return (
         <div>
-            {currentPath === '/' ? (
+            {currentPath === '/visualizations' ? (
+                <PlotComponent
+                    labels={Object.keys(dataToRender)}
+                    values={Object.values(dataToRender).map((value) =>
+                        typeof value === 'object'
+                            ? Object.keys(value).length
+                            : value.length || value
+                    )}
+                />
+            ) : (
                 <div
                     style={{
                         display: 'flex',
@@ -33,15 +47,6 @@ const Overview = () => {
                         />
                     ))}
                 </div>
-            ) : (
-                <PlotComponent
-                    labels={Object.keys(dataToRender)}
-                    values={Object.values(dataToRender).map((value) =>
-                        typeof value === 'object'
-                            ? Object.keys(value).length
-                            : value.length || value
-                    )}
-                />
             )}
         </div>
     );

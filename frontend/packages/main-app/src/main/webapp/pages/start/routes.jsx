@@ -11,6 +11,7 @@ const AppRoutes = () => {
             <Navbar />
             <Routes>
                 <Route path="/" element={<Overview />} />
+                <Route path="/en-US/app/main-app/start" element={<Overview />} />
                 <Route path="/data-inventory" element={<TablesView />} />
                 <Route path="/knowledge-objects" element={<TablesView />} />
                 <Route path="/visualizations" element={<Overview />} />
