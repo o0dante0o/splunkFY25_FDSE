@@ -1,4 +1,4 @@
-# Contributing to Repo
+# Contributing to Main
 
 ## Overview
 
@@ -39,5 +39,5 @@ For more granular control of development scripts, consider using [Lerna](https:/
 
 ## Code Formatting
 
-Repo uses [prettier](https://github.com/prettier/prettier) to ensure consistent code formatting. It is recommended
+Main uses [prettier](https://github.com/prettier/prettier) to ensure consistent code formatting. It is recommended
  to [add a prettier plugin to your editor/ide](https://github.com/prettier/prettier#editor-integration).
