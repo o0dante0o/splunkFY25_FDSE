@@ -138,8 +138,8 @@ The project is composed of several React components, each with specific function
 - **@splunk/custom-classification-component**: (Component) Allows to change classification.
 - **@splunk/nav-component**: (Component) Navigation bar for the application.
 - **@splunk/search-component.jsx**: (Component) Search bar to filter data.
-- **@splunk/TableComponent.jsx**: (Component) Displays data in a table format.
-- **@splunk/TagsComponent.jsx**: (Component) Manages and displays tags.
+- **@splunk/table-component.jsx**: (Component) Displays data in a table format.
+- **@splunk/tags-component.jsx**: (Component) Manages and displays tags.
 - **@splunk/global-state**: Manages global state using React Context API.
 - **tablesView.jsx**: (View) Manages and visualizes data tables.
 - **overview.jsx**: (View) Provides an overview of the data with counts of each collection.
