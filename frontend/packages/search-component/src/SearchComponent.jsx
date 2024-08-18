@@ -1,4 +1,3 @@
-// src/Components/SearchComponent.jsx
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import Search from '@splunk/react-ui/Search';
 import { GlobalContext } from '@splunk/global-state';
@@ -19,16 +18,13 @@ function SearchComponent() {
                 protocol: 'https',
             },
         ],
-        apiKey: 'jpmBZkUymyxRxKOzxiwVS7b2JG8Ou2iS', // Search-Only API Key
+        apiKey: 'jpmBZkUymyxRxKOzxiwVS7b2JG8Ou2iS',
         connectionTimeoutSeconds: 2,
     });
 
     const handleFetch = async (searchValue = '') => {
         setValue(searchValue);
         if (searchValue.length > 2) {
-            console.log('Searching for:', searchValue);
-            console.log('Search Options:', options);
-            console.log('value', value);
             setIsLoading(true);
             try {
                 const searchParameters = {
@@ -73,7 +69,6 @@ function SearchComponent() {
                     }, {});
 
                 if (fetchOptions.current) {
-                    console.log('Filtered Search Results:', filteredResults);
                     setOptions(filteredResults);
                     setSearchResults(filteredResults);
                     setIsLoading(false);
@@ -81,11 +76,11 @@ function SearchComponent() {
             } catch (error) {
                 console.error('Error fetching search results:', error);
                 setIsLoading(false);
-                setSearchResults([]); // Set global state to empty list on error
+                setSearchResults([]);
             }
         } else {
             setOptions([]);
-            setSearchResults([]); // Set global state to empty list if search value is too short
+            setSearchResults([]);
         }
     };
 
