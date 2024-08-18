@@ -1,4 +1,3 @@
-
 # splunkFY25_FDSE_back_end
 
 Design and build a customized Splunk solution to address real-world problems using Splunk tools. Develop a comprehensive architecture with data fetching, storage, custom REST API endpoints, and advanced search functionality. Showcase Splunk's capabilities through creative problem-solving, emphasizing user experience and efficient data handling.
@@ -81,6 +80,7 @@ Review all collections and the count of documents in each one.
 List all documents in all collections or in a specific collection.
 
 **Parameters:**
+
 - `type` (optional, default 'all'): Name of the collection to list. If not specified, lists all.
 
 **Returns:** JSON with the documents from the requested collections.
@@ -92,6 +92,7 @@ List all documents in all collections or in a specific collection.
 Search for a query across all collections.
 
 **Parameters:**
+
 - `q` (required): Search string.
 
 **Returns:** JSON with the search results by collection.
@@ -103,6 +104,7 @@ Search for a query across all collections.
 Add metadata/classification or tags to a specific document in the specified collection.
 
 **Parameters:**
+
 - `type` (required): Type of metadata/classification ('custom_classification', or 'add_tag').
 - `id` (required): ID of the document to update.
 - JSON in the request body with the metadata/classification/tag data.
@@ -116,8 +118,66 @@ Add metadata/classification or tags to a specific document in the specified coll
 Remove a tag or an entire document from the specified collection.
 
 **Parameters:**
+
 - `type` (required): Type of operation ('remove_tag' or 'remove_document').
 - `id` (required): ID of the document to update or delete.
 - JSON in the request body with the tag to remove (if applicable).
 
-**Returns:** Success or error message.
+# splunkFY25_FDSE_Front_end
+
+## Description
+
+This project is a data visualization application built with React. The application allows users to interact with various components to explore and analyze data.
+
+## Project Structure
+
+The project is composed of several React components, each with specific functionalities:
+
+- **ActionsComponent.jsx**: (Component) Handles user actions (delete and share).
+- **CardComponent.jsx**: (Component) Displays information in a card format.
+- **CustomClassificationComponent.jsx**: (Component) Allows to change classification.
+- **NavbarComponent.jsx**: (Component) Navigation bar for the application.
+- **SearchBarComponent.jsx**: (Component) Search bar to filter data.
+- **TableComponent.jsx**: (Component) Displays data in a table format.
+- **TagsComponent.jsx**: (Component) Manages and displays tags.
+- **DataTables.jsx**: (View) Manages and visualizes data tables.
+- **Overview.jsx**: (View) Provides an overview of the data with counts of each collection.
+- **Visualizations.jsx**: (View) Generates graphs and visualizations for data analysis.
+- **FetchData.jsx**: Fetches data from an API and updates the global state.
+- **GlobalState.jsx**: Manages global state using React Context API.
+- **Main.jsx**: Main entry point of the application, integrates all components and routes.
+- **Routes.jsx**: Defines the application routes.
+-
+
+## Installation
+
+To install and run the project locally, follow these steps:
+
+1. Clone this repository
+
+2. Navigate to the project directory:
+   ```bash
+   cd your_repository/frontend
+   ```
+3. Install the dependencies using Yarn:
+   ```bash
+   yarn install
+   ```
+4. Build the project:
+   ```bash
+   yarn run build
+   ```
+5. Link the application with your local Splunk installation:
+   ```bash
+   yarn run link:app
+   ```
+   Ensure that `$SPLUNK_HOME` is set to the installation directory of your local Splunk instance.
+6. Start the application in watch mode:
+   ```bash
+   yarn run start
+   ```
+   Make sure to restart Splunk to pick up the new application. After restarting, the app will be available at `http://localhost:8000/en-US/app/your_app_name/start`.
+
+## Contact
+
+For any questions or suggestions, please contact [j.a@a-vision.co](mailto:j.a@a-vision.co).
