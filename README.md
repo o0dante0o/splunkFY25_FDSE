@@ -133,20 +133,18 @@ This project is a data visualization application built with React. The applicati
 
 The project is composed of several React components, each with specific functionalities:
 
-- **ActionsComponent.jsx**: (Component) Handles user actions (delete and share).
-- **CardComponent.jsx**: (Component) Displays information in a card format.
-- **CustomClassificationComponent.jsx**: (Component) Allows to change classification.
-- **NavbarComponent.jsx**: (Component) Navigation bar for the application.
-- **SearchBarComponent.jsx**: (Component) Search bar to filter data.
-- **TableComponent.jsx**: (Component) Displays data in a table format.
-- **TagsComponent.jsx**: (Component) Manages and displays tags.
-- **DataTables.jsx**: (View) Manages and visualizes data tables.
-- **Overview.jsx**: (View) Provides an overview of the data with counts of each collection.
-- **Visualizations.jsx**: (View) Generates graphs and visualizations for data analysis.
-- **FetchData.jsx**: Fetches data from an API and updates the global state.
-- **GlobalState.jsx**: Manages global state using React Context API.
-- **Main.jsx**: Main entry point of the application, integrates all components and routes.
-- **Routes.jsx**: Defines the application routes.
+- **@splunk/actions-component**: (Component) Handles user actions (delete and share).
+- **@splunk/card-component**: (Component) Displays information in a card format.
+- **@splunk/custom-classification-component**: (Component) Allows to change classification.
+- **@splunk/nav-component**: (Component) Navigation bar for the application.
+- **@splunk/search-component.jsx**: (Component) Search bar to filter data.
+- **@splunk/TableComponent.jsx**: (Component) Displays data in a table format.
+- **@splunk/TagsComponent.jsx**: (Component) Manages and displays tags.
+- **@splunk/global-state**: Manages global state using React Context API.
+- **tablesView.jsx**: (View) Manages and visualizes data tables.
+- **overview.jsx**: (View) Provides an overview of the data with counts of each collection.
+- **index.jsx**: Main entry point of the application, integrates all components and routes.
+- **routes.jsx**: Defines the application routes.
 -
 
 ## Installation
@@ -169,6 +167,7 @@ To install and run the project locally, follow these steps:
    ```
 5. Link the application with your local Splunk installation:
    ```bash
+   cd packages/main-app
    yarn run link:app
    ```
    Ensure that `$SPLUNK_HOME` is set to the installation directory of your local Splunk instance.
