@@ -1,6 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import Plot from 'react-plotly.js';
 
+/**
+ * PlotComponent
+ *
+ * A component that renders a pie chart using Plotly.
+ *
+ * @param {Object} props - The component props.
+ * @param {Array<string>} props.labels - The labels for the pie chart.
+ * @param {Array<number>} props.values - The values for the pie chart.
+ *
+ * @returns {JSX.Element} The rendered plot component.
+ */
 function PlotComponent({ labels, values }) {
     return (
         <div style={{ width: '60%', margin: 'auto', padding: '20px' }}>

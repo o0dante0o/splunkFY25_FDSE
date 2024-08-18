@@ -26,6 +26,8 @@
     "@splunk/global-state": "^0.0.1",
     "@splunk/nav-component": "^0.0.1",
     "axios": "^1.7.4",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.5",
     "plotly.js": "^2.34.0",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^6.26.1",

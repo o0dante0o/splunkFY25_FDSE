@@ -4,15 +4,42 @@ import Dropdown from '@splunk/react-ui/Dropdown';
 import Menu from '@splunk/react-ui/Menu';
 import { GlobalContext } from '@splunk/global-state';
 
+/**
+ * CustomClassificationComponent
+ *
+ * A component that allows users to select a classification from a dropdown menu.
+ *
+ * @param {string} id - The unique identifier for the classification item.
+ * @param {string} initialClassification - The initial classification value.
+ * @param {string} customKey - A custom key used for updating the classification.
+ *
+ * @returns {JSX.Element} The rendered component.
+ */
 const CustomClassificationComponent = ({ id, initialClassification, customKey }) => {
     const { updateClassification } = useContext(GlobalContext);
     const [classification, setClassification] = useState(initialClassification);
 
+    /**
+     * handleSelect
+     *
+     * Handles the selection of a classification from the dropdown menu.
+     *
+     * @param {string} value - The selected classification value.
+     */
     const handleSelect = (value) => {
         setClassification(value);
         updateClassification(id, value, customKey); // Use customKey instead of key
     };
 
+    /**
+     * getColorForClassification
+     *
+     * Returns the color and background color for a given classification.
+     *
+     * @param {string} classification - The classification value.
+     *
+     * @returns {Object} An object containing the color and background color.
+     */
     const getColorForClassification = (classification) => {
         switch (classification) {
             case 'TopSecret/SCI':

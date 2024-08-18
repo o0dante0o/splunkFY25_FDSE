@@ -4,6 +4,16 @@ import axios from 'axios';
 
 export const GlobalContext = createContext();
 
+/**
+ * GlobalProvider
+ *
+ * A context provider that manages global state and provides functions to manipulate it.
+ *
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components that will have access to the context.
+ *
+ * @returns {JSX.Element} The context provider component.
+ */
 export const GlobalProvider = ({ children }) => {
     const [state, setState] = useState({
         list: {},
@@ -15,6 +25,11 @@ export const GlobalProvider = ({ children }) => {
     const location = useLocation();
 
     useEffect(() => {
+        /**
+         * fetchInitialData
+         *
+         * Fetches initial data for the list and overview from the API.
+         */
         const fetchInitialData = async () => {
             try {
                 const all_items = await fetch(
@@ -41,6 +56,15 @@ export const GlobalProvider = ({ children }) => {
         fetchInitialData();
     }, [location.pathname]);
 
+    /**
+     * removeItem
+     *
+     * Removes an item from the list and updates the state.
+     *
+     * @param {string} id - The ID of the item to be removed.
+     * @param {string} type - The type of removal operation.
+     * @param {string} customKey - The key under which the item is stored.
+     */
     const removeItem = async (id, type, customKey) => {
         try {
             await axios.post(
@@ -74,6 +98,15 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
+    /**
+     * addTag
+     *
+     * Adds a tag to an item and updates the state.
+     *
+     * @param {string} id - The ID of the item to be tagged.
+     * @param {string} tag - The tag to be added.
+     * @param {string} customKey - The key under which the item is stored.
+     */
     const addTag = async (id, tag, customKey) => {
         try {
             const response = await axios.post(
@@ -109,6 +142,15 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
+    /**
+     * removeTag
+     *
+     * Removes a tag from an item and updates the state.
+     *
+     * @param {string} id - The ID of the item to be untagged.
+     * @param {string} tag - The tag to be removed.
+     * @param {string} customKey - The key under which the item is stored.
+     */
     const removeTag = async (id, tag, customKey) => {
         try {
             await axios.post(
@@ -146,6 +188,15 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
+    /**
+     * updateClassification
+     *
+     * Updates the classification of an item and updates the state.
+     *
+     * @param {string} id - The ID of the item to be updated.
+     * @param {string} classification - The new classification value.
+     * @param {string} key - The key under which the item is stored.
+     */
     const updateClassification = async (id, classification, key) => {
         try {
             const response = await axios.post(

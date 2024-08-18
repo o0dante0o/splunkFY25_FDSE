@@ -2,6 +2,16 @@ import React, { useContext } from 'react';
 import { GlobalContext } from '@splunk/global-state';
 import TableComponent from '@splunk/table-component';
 
+/**
+ * filterListBySearchResults
+ *
+ * Filters the list based on search results.
+ *
+ * @param {Object} list - The original list of items.
+ * @param {Object} searchResults - The search results to filter by.
+ *
+ * @returns {Object} The filtered list.
+ */
 const filterListBySearchResults = (list, searchResults) => {
     const filteredList = {};
 
@@ -18,13 +28,23 @@ const filterListBySearchResults = (list, searchResults) => {
     return filteredList;
 };
 
+/**
+ * TablesView
+ *
+ * A component that renders tables based on the current path and search results.
+ *
+ * @returns {JSX.Element} The rendered tables view component.
+ */
 const TablesView = () => {
     const { state } = useContext(GlobalContext);
     const { list, currentPath, searchResults } = state;
+
+    // Display a loading message if the current path is not set
     if (!currentPath) {
-        return <p>Cargando datos...</p>;
+        return <p>Loading data...</p>;
     }
 
+    // Determine the data to render based on whether there are search results
     const dataToRender =
         searchResults && Object.keys(searchResults).length > 0
             ? filterListBySearchResults(list, searchResults)
@@ -35,6 +55,16 @@ const TablesView = () => {
 
     const columns = ['name', 'description', 'owner', 'custom_classification', 'tags'];
 
+    /**
+     * getFilteredData
+     *
+     * Filters the data based on the specified collections.
+     *
+     * @param {Object} data - The data to be filtered.
+     * @param {Array<string>} collections - The collections to filter by.
+     *
+     * @returns {Object} The filtered data.
+     */
     const getFilteredData = (data, collections) => {
         return collections.reduce((acc, key) => {
             if (data[key]) {

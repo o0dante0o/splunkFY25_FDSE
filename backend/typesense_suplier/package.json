@@ -1,0 +1,14 @@
+{
+    "name": "mongo-typesense-sync",
+    "version": "1.0.0",
+    "description": "Synchronize MongoDB collections with Typesense",
+    "main": "index.js",
+    "scripts": {
+      "start": "node src/index.js"
+    },
+    "dependencies": {
+    "dotenv": "^10.0.0",
+    "mongodb": "^4.0.0",
+    "typesense": "^1.9.0-7" 
+  }
+}

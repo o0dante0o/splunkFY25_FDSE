@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom'; // Añadir esta línea
+import { BrowserRouter } from 'react-router-dom';
 
 import layout from '@splunk/react-page';
 import SearchComponent from '@splunk/search-component';
