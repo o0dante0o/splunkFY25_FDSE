@@ -4,11 +4,11 @@ import TrashCanCross from '@splunk/react-icons/TrashCanCross';
 import Clipboard from '@splunk/react-icons/Clipboard';
 import { GlobalContext } from '@splunk/global-state';
 
-const ActionsComponent = ({ row }) => {
+const ActionsComponent = ({ row, customKey }) => {
     const { removeItem } = useContext(GlobalContext);
 
     const handleDelete = async () => {
-        await removeItem(row._id, 'remove_document');
+        await removeItem(row._id, 'remove_document', customKey);
     };
 
     const handleShare = () => {

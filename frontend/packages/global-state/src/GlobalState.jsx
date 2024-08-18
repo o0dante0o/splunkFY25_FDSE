@@ -9,11 +9,11 @@ export const GlobalProvider = ({ children }) => {
         list: {},
         overview: {},
         currentPath: '',
-        searchResults: {}, // Inicializar searchResults
+        searchResults: {},
     });
-    console.log('searchResults', state.searchResults);
+
     const location = useLocation();
-    console.log('location', location);
+
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
@@ -31,7 +31,7 @@ export const GlobalProvider = ({ children }) => {
                     list: allItems,
                     overview: itemsCount,
                     currentPath: location.pathname,
-                    searchResults: prevState.searchResults, // Mantener searchResults
+                    searchResults: prevState.searchResults,
                 }));
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -41,83 +41,123 @@ export const GlobalProvider = ({ children }) => {
         fetchInitialData();
     }, [location.pathname]);
 
-    const addItem = async (id, type) => {
-        try {
-            const response = await axios.post(
-                `https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/add?type=${type}&id=${id}`
-            );
-            setState((prevState) => ({
-                ...prevState,
-                list: [...prevState.list, response.data],
-            }));
-        } catch (error) {
-            console.error('Error adding item:', error);
-        }
-    };
-
-    const removeItem = async (id, type) => {
+    const removeItem = async (id, type, customKey) => {
         try {
             await axios.post(
                 `https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/remove?type=${type}&id=${id}`,
                 { id }
             );
-            setState((prevState) => ({
-                ...prevState,
-                list: prevState.list.filter((item) => item._id !== id),
-            }));
+            setState((prevState) => {
+                const updatedList = prevState.list[customKey].filter((item) => item._id !== id);
+                let updatedSearchResults = prevState.searchResults;
+
+                if (updatedSearchResults && Array.isArray(updatedSearchResults[customKey])) {
+                    updatedSearchResults = {
+                        ...updatedSearchResults,
+                        [customKey]: updatedSearchResults[customKey].filter(
+                            (item) => item._id !== id
+                        ),
+                    };
+                }
+
+                return {
+                    ...prevState,
+                    list: {
+                        ...prevState.list,
+                        [customKey]: updatedList,
+                    },
+                    searchResults: updatedSearchResults,
+                };
+            });
         } catch (error) {
             console.error('Error removing item:', error);
         }
     };
 
-    const addTag = async (id, tag) => {
+    const addTag = async (id, tag, customKey) => {
         try {
             const response = await axios.post(
                 `https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/add?type=add_tag&id=${id}`,
                 { tag }
             );
-            setState((prevState) => ({
-                ...prevState,
-                list: prevState.list.map((item) =>
+            setState((prevState) => {
+                const updatedList = prevState.list[customKey].map((item) =>
                     item._id === id ? { ...item, tags: [...item.tags, tag] } : item
-                ),
-            }));
+                );
+                let updatedSearchResults = prevState.searchResults;
+
+                if (updatedSearchResults && Array.isArray(updatedSearchResults[customKey])) {
+                    updatedSearchResults = {
+                        ...updatedSearchResults,
+                        [customKey]: updatedSearchResults[customKey].map((item) =>
+                            item._id === id ? { ...item, tags: [...item.tags, tag] } : item
+                        ),
+                    };
+                }
+
+                return {
+                    ...prevState,
+                    list: {
+                        ...prevState.list,
+                        [customKey]: updatedList,
+                    },
+                    searchResults: updatedSearchResults,
+                };
+            });
         } catch (error) {
             console.error('Error adding tag:', error);
         }
     };
 
-    const removeTag = async (id, tag) => {
+    const removeTag = async (id, tag, customKey) => {
         try {
             await axios.post(
                 `https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/remove?type=remove_tag&id=${id}`,
                 { tag }
             );
-            setState((prevState) => ({
-                ...prevState,
-                list: prevState.list.map((item) =>
+            setState((prevState) => {
+                const updatedList = prevState.list[customKey].map((item) =>
                     item._id === id ? { ...item, tags: item.tags.filter((t) => t !== tag) } : item
-                ),
-            }));
+                );
+                let updatedSearchResults = prevState.searchResults;
+
+                if (updatedSearchResults && Array.isArray(updatedSearchResults[customKey])) {
+                    updatedSearchResults = {
+                        ...updatedSearchResults,
+                        [customKey]: updatedSearchResults[customKey].map((item) =>
+                            item._id === id
+                                ? { ...item, tags: item.tags.filter((t) => t !== tag) }
+                                : item
+                        ),
+                    };
+                }
+
+                return {
+                    ...prevState,
+                    list: {
+                        ...prevState.list,
+                        [customKey]: updatedList,
+                    },
+                    searchResults: updatedSearchResults,
+                };
+            });
         } catch (error) {
             console.error('Error removing tag:', error);
         }
     };
 
     const updateClassification = async (id, classification, key) => {
-        console.log('id', id + 'classification', classification + 'key', key);
+        console.log('id', id);
         try {
             const response = await axios.post(
                 `https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/add?type=custom_classification&id=${id}`,
                 { custom_classification: classification }
             );
-
+            console.log('response', response);
             setState((prevState) => {
-                const listToUpdate = prevState.list[key]; // Access the specific array
-                // Check and update searchResults if necessary
+                const listToUpdate = prevState.list[key];
                 let updatedSearchResults = prevState.searchResults;
-                console.log('prevState', prevState);
-                console.log('updatedSearchResults', updatedSearchResults);
+
                 if (updatedSearchResults && Array.isArray(updatedSearchResults[key])) {
                     updatedSearchResults = {
                         ...updatedSearchResults,
@@ -130,7 +170,7 @@ export const GlobalProvider = ({ children }) => {
                 }
                 if (!Array.isArray(listToUpdate)) {
                     console.error(`The list under the key "${key}" is not an array`);
-                    return prevState; // If it's not an array, return the previous state unchanged
+                    return prevState;
                 }
 
                 return {
@@ -141,7 +181,7 @@ export const GlobalProvider = ({ children }) => {
                             item._id === id ? { ...item, classification: classification } : item
                         ),
                     },
-                    searchResults: updatedSearchResults, // Asegúrate de actualizar searchResults
+                    searchResults: updatedSearchResults,
                 };
             });
         } catch (error) {
@@ -156,7 +196,6 @@ export const GlobalProvider = ({ children }) => {
                 searchResults: state.searchResults,
                 setSearchResults: (newResults) =>
                     setState((prevState) => ({ ...prevState, searchResults: newResults })),
-                addItem,
                 removeItem,
                 addTag,
                 removeTag,

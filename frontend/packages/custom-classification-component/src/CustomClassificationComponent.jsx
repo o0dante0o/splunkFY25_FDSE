@@ -5,9 +5,6 @@ import Menu from '@splunk/react-ui/Menu';
 import { GlobalContext } from '@splunk/global-state';
 
 const CustomClassificationComponent = ({ id, initialClassification, customKey }) => {
-    console.log('initialClassification', initialClassification);
-    console.log('customKey', customKey);
-    console.log('id', id);
     const { updateClassification } = useContext(GlobalContext);
     const [classification, setClassification] = useState(initialClassification);
 

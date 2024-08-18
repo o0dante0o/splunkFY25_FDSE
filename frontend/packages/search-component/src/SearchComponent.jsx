@@ -33,7 +33,7 @@ function SearchComponent() {
             try {
                 const searchParameters = {
                     q: searchValue,
-                    query_by: 'name,description,owner',
+                    query_by: 'name,description,owner,custom_classification,tags',
                 };
                 const collections = [
                     'sources',

@@ -101,6 +101,7 @@ const TableComponent = ({ data, columns, kindValues }) => {
                                         <TagsComponent
                                             id={row._id ? row._id : row.id}
                                             tags={row.tags}
+                                            customKey={row.kind}
                                         />
                                     ) : (
                                         <Tooltip content={row[col]}>
@@ -110,7 +111,7 @@ const TableComponent = ({ data, columns, kindValues }) => {
                                 </Table.Cell>
                             ))}
                             <Table.Cell>
-                                <ActionsComponent row={row} />
+                                <ActionsComponent row={row} customKey={row.kind} />
                             </Table.Cell>
                         </Table.Row>
                     ))}
