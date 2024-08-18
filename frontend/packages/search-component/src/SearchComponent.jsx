@@ -34,6 +34,7 @@ function SearchComponent() {
                 const searchParameters = {
                     q: searchValue,
                     query_by: 'name,description,owner,custom_classification,tags',
+                    per_page: 100,
                 };
                 const collections = [
                     'sources',
