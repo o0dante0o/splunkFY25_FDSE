@@ -1,36 +1,28 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Button from '@splunk/react-ui/Button';
+import React, { useState, useContext } from 'react';
+import Multiselect from '@splunk/react-ui/Multiselect';
+import { GlobalContext } from '@splunk/global-state';
 
-import { StyledContainer, StyledGreeting } from './TagsComponentStyles';
+const TagsComponent = ({ id, tags: initialTags }) => {
+    const { addTag, removeTag } = useContext(GlobalContext);
+    const [tags, setTags] = useState(initialTags || []);
 
-const propTypes = {
-    name: PropTypes.string,
-};
+    const handleChange = (e, { values }) => {
+        const newTags = values.filter((tag) => !tags.includes(tag));
+        const removedTags = tags.filter((tag) => !values.includes(tag));
 
-const TagsComponent = ({ name = 'User' }) => {
-    const [counter, setCounter] = useState(0);
+        newTags.forEach((tag) => addTag(id, tag));
+        removedTags.forEach((tag) => removeTag(id, tag));
 
-    const message =
-        counter === 0
-            ? 'You should try clicking the button.'
-            : `You've clicked the button ${counter} time${counter > 1 ? 's' : ''}.`;
+        setTags(values);
+    };
 
     return (
-        <StyledContainer>
-            <StyledGreeting data-testid="greeting">Hello, {name}!</StyledGreeting>
-            <div data-testid="message">{message}</div>
-            <Button
-                label="Click here"
-                appearance="primary"
-                onClick={() => {
-                    setCounter(counter + 1);
-                }}
-            />
-        </StyledContainer>
+        <Multiselect allowNewValues values={tags} onChange={handleChange} inline>
+            {tags.map((tag) => (
+                <Multiselect.Option key={tag} label={tag} value={tag} />
+            ))}
+        </Multiselect>
     );
 };
-
-TagsComponent.propTypes = propTypes;
 
 export default TagsComponent;

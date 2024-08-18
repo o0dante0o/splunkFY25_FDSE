@@ -1,4 +1,3 @@
-// src/GlobalState.jsx
 import React, { createContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -6,8 +5,13 @@ import axios from 'axios';
 export const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
-    const [state, setState] = useState({});
-    const [searchResults, setSearchResults] = useState(null); // Añadir searchResults al estado global
+    const [state, setState] = useState({
+        list: {},
+        overview: {},
+        currentPath: '',
+        searchResults: {}, // Inicializar searchResults
+    });
+    console.log('searchResults', state.searchResults);
     const location = useLocation();
     console.log('location', location);
     useEffect(() => {
@@ -23,11 +27,12 @@ export const GlobalProvider = ({ children }) => {
                 );
                 const itemsCount = await items_count.json();
 
-                setState({
+                setState((prevState) => ({
                     list: allItems,
                     overview: itemsCount,
                     currentPath: location.pathname,
-                });
+                    searchResults: prevState.searchResults, // Mantener searchResults
+                }));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -99,20 +104,46 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
-    const updateClassification = async (id, classification) => {
+    const updateClassification = async (id, classification, key) => {
+        console.log('id', id + 'classification', classification + 'key', key);
         try {
             const response = await axios.post(
                 `https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/add?type=custom_classification&id=${id}`,
                 { custom_classification: classification }
             );
-            setState((prevState) => ({
-                ...prevState,
-                list: prevState.list.map((item) =>
-                    item._id === id
-                        ? { ...item, classification: response.data.classification }
-                        : item
-                ),
-            }));
+
+            setState((prevState) => {
+                const listToUpdate = prevState.list[key]; // Access the specific array
+                // Check and update searchResults if necessary
+                let updatedSearchResults = prevState.searchResults;
+                console.log('prevState', prevState);
+                console.log('updatedSearchResults', updatedSearchResults);
+                if (updatedSearchResults && Array.isArray(updatedSearchResults[key])) {
+                    updatedSearchResults = {
+                        ...updatedSearchResults,
+                        [key]: updatedSearchResults[key].map((item) =>
+                            item.id === id
+                                ? { ...item, custom_classification: classification }
+                                : item
+                        ),
+                    };
+                }
+                if (!Array.isArray(listToUpdate)) {
+                    console.error(`The list under the key "${key}" is not an array`);
+                    return prevState; // If it's not an array, return the previous state unchanged
+                }
+
+                return {
+                    ...prevState,
+                    list: {
+                        ...prevState.list,
+                        [key]: listToUpdate.map((item) =>
+                            item._id === id ? { ...item, classification: classification } : item
+                        ),
+                    },
+                    searchResults: updatedSearchResults, // Asegúrate de actualizar searchResults
+                };
+            });
         } catch (error) {
             console.error('Error updating classification:', error);
         }
@@ -122,8 +153,9 @@ export const GlobalProvider = ({ children }) => {
         <GlobalContext.Provider
             value={{
                 state,
-                searchResults,
-                setSearchResults,
+                searchResults: state.searchResults,
+                setSearchResults: (newResults) =>
+                    setState((prevState) => ({ ...prevState, searchResults: newResults })),
                 addItem,
                 removeItem,
                 addTag,

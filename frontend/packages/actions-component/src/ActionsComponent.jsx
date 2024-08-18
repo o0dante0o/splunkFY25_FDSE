@@ -1,36 +1,32 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 import Button from '@splunk/react-ui/Button';
+import TrashCanCross from '@splunk/react-icons/TrashCanCross';
+import Clipboard from '@splunk/react-icons/Clipboard';
+import { GlobalContext } from '@splunk/global-state';
 
-import { StyledContainer, StyledGreeting } from './ActionsComponentStyles';
+const ActionsComponent = ({ row }) => {
+    const { removeItem } = useContext(GlobalContext);
 
-const propTypes = {
-    name: PropTypes.string,
-};
+    const handleDelete = async () => {
+        await removeItem(row._id, 'remove_document');
+    };
 
-const ActionsComponent = ({ name = 'User' }) => {
-    const [counter, setCounter] = useState(0);
-
-    const message =
-        counter === 0
-            ? 'You should try clicking the button.'
-            : `You've clicked the button ${counter} time${counter > 1 ? 's' : ''}.`;
+    const handleShare = () => {
+        const jsonString = JSON.stringify(row, null, 2);
+        navigator.clipboard.writeText(jsonString);
+    };
 
     return (
-        <StyledContainer>
-            <StyledGreeting data-testid="greeting">Hello, {name}!</StyledGreeting>
-            <div data-testid="message">{message}</div>
+        <>
             <Button
-                label="Click here"
                 appearance="primary"
-                onClick={() => {
-                    setCounter(counter + 1);
-                }}
+                style={{ backgroundColor: 'red', color: 'white' }}
+                icon={<TrashCanCross />}
+                onClick={handleDelete}
             />
-        </StyledContainer>
+            <Button icon={<Clipboard />} onClick={handleShare} />
+        </>
     );
 };
-
-ActionsComponent.propTypes = propTypes;
 
 export default ActionsComponent;

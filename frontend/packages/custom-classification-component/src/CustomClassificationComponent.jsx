@@ -1,36 +1,93 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useContext } from 'react';
 import Button from '@splunk/react-ui/Button';
+import Dropdown from '@splunk/react-ui/Dropdown';
+import Menu from '@splunk/react-ui/Menu';
+import { GlobalContext } from '@splunk/global-state';
 
-import { StyledContainer, StyledGreeting } from './CustomClassificationComponentStyles';
+const CustomClassificationComponent = ({ id, initialClassification, customKey }) => {
+    console.log('initialClassification', initialClassification);
+    console.log('customKey', customKey);
+    console.log('id', id);
+    const { updateClassification } = useContext(GlobalContext);
+    const [classification, setClassification] = useState(initialClassification);
 
-const propTypes = {
-    name: PropTypes.string,
-};
+    const handleSelect = (value) => {
+        setClassification(value);
+        updateClassification(id, value, customKey); // Use customKey instead of key
+    };
 
-const CustomClassificationComponent = ({ name = 'User' }) => {
-    const [counter, setCounter] = useState(0);
+    const getColorForClassification = (classification) => {
+        switch (classification) {
+            case 'TopSecret/SCI':
+                return { color: 'darkred', backgroundColor: '#ffcccc' };
+            case 'TopSecret':
+                return { color: 'darkred', backgroundColor: '#ff9999' };
+            case 'Secret':
+                return { color: 'orange', backgroundColor: '#ffe6cc' };
+            case 'Confidential':
+                return { color: 'blue', backgroundColor: '#cce6ff' };
+            case 'Unclassified':
+                return { color: 'green', backgroundColor: '#ccffcc' };
+            default:
+                return { color: 'black', backgroundColor: 'white' };
+        }
+    };
 
-    const message =
-        counter === 0
-            ? 'You should try clicking the button.'
-            : `You've clicked the button ${counter} time${counter > 1 ? 's' : ''}.`;
+    const toggle = (
+        <Button
+            appearance="toggle"
+            label={classification || 'Select Classification'}
+            isMenu
+            style={getColorForClassification(classification)}
+        />
+    );
 
     return (
-        <StyledContainer>
-            <StyledGreeting data-testid="greeting">Hello, {name}!</StyledGreeting>
-            <div data-testid="message">{message}</div>
-            <Button
-                label="Click here"
-                appearance="primary"
-                onClick={() => {
-                    setCounter(counter + 1);
-                }}
-            />
-        </StyledContainer>
+        <Dropdown toggle={toggle}>
+            <Menu style={{ width: 200 }}>
+                <Menu.Item
+                    label="TopSecret/SCI"
+                    value="TopSecret/SCI"
+                    onClick={() => handleSelect('TopSecret/SCI')}
+                    style={getColorForClassification('TopSecret/SCI')}
+                >
+                    TopSecret/SCI
+                </Menu.Item>
+                <Menu.Item
+                    label="TopSecret"
+                    value="TopSecret"
+                    onClick={() => handleSelect('TopSecret')}
+                    style={getColorForClassification('TopSecret')}
+                >
+                    TopSecret
+                </Menu.Item>
+                <Menu.Item
+                    label="Secret"
+                    value="Secret"
+                    onClick={() => handleSelect('Secret')}
+                    style={getColorForClassification('Secret')}
+                >
+                    Secret
+                </Menu.Item>
+                <Menu.Item
+                    label="Confidential"
+                    value="Confidential"
+                    onClick={() => handleSelect('Confidential')}
+                    style={getColorForClassification('Confidential')}
+                >
+                    Confidential
+                </Menu.Item>
+                <Menu.Item
+                    label="Unclassified"
+                    value="Unclassified"
+                    onClick={() => handleSelect('Unclassified')}
+                    style={getColorForClassification('Unclassified')}
+                >
+                    Unclassified
+                </Menu.Item>
+            </Menu>
+        </Dropdown>
     );
 };
-
-CustomClassificationComponent.propTypes = propTypes;
 
 export default CustomClassificationComponent;
