@@ -147,13 +147,11 @@ export const GlobalProvider = ({ children }) => {
     };
 
     const updateClassification = async (id, classification, key) => {
-        console.log('id', id);
         try {
             const response = await axios.post(
                 `https://ve0g3ekx8b.execute-api.us-east-1.amazonaws.com/dev/add?type=custom_classification&id=${id}`,
                 { custom_classification: classification }
             );
-            console.log('response', response);
             setState((prevState) => {
                 const listToUpdate = prevState.list[key];
                 let updatedSearchResults = prevState.searchResults;

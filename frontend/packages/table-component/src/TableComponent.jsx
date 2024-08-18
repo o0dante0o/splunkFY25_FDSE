@@ -48,81 +48,85 @@ const TableComponent = ({ data, columns, kindValues }) => {
     };
 
     return (
-        <>
-            <Table stripeRows>
-                <Table.Head>
-                    <Table.HeadDropdownCell
-                        label={
-                            <>
-                                <Filter size={1.5} />
-                                {filter.length > 0 ? ` ${filter.length}/${kindValues.length}` : ''}
-                            </>
-                        }
-                    >
-                        <Menu>
-                            {kindValues.map((kind) => (
-                                <Menu.Item
-                                    key={kind}
-                                    selectable
-                                    selected={filter.includes(kind)}
-                                    onClick={(e) =>
-                                        toggleFilterValue(e, {
-                                            filterValue: kind,
-                                        })
-                                    }
-                                >
-                                    {kind}
-                                </Menu.Item>
-                            ))}
-                        </Menu>
-                    </Table.HeadDropdownCell>
-                    {columns.map((col) => (
-                        <Table.HeadCell key={col}>{capitalize(col)}</Table.HeadCell>
-                    ))}
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div style={{ flex: '1 1 auto', overflow: 'auto' }}>
+                <Table stripeRows>
+                    <Table.Head>
+                        <Table.HeadDropdownCell
+                            label={
+                                <>
+                                    <Filter size={1.5} />
+                                    {filter.length > 0
+                                        ? ` ${filter.length}/${kindValues.length}`
+                                        : ''}
+                                </>
+                            }
+                        >
+                            <Menu>
+                                {kindValues.map((kind) => (
+                                    <Menu.Item
+                                        key={kind}
+                                        selectable
+                                        selected={filter.includes(kind)}
+                                        onClick={(e) =>
+                                            toggleFilterValue(e, {
+                                                filterValue: kind,
+                                            })
+                                        }
+                                    >
+                                        {kind}
+                                    </Menu.Item>
+                                ))}
+                            </Menu>
+                        </Table.HeadDropdownCell>
+                        {columns.map((col) => (
+                            <Table.HeadCell key={col}>{capitalize(col)}</Table.HeadCell>
+                        ))}
 
-                    <Table.HeadCell>Options</Table.HeadCell>
-                </Table.Head>
-                <Table.Body>
-                    {paginatedData.map((row) => (
-                        <Table.Row key={row._id || row.id}>
-                            <Table.Cell>{row.kind}</Table.Cell>
-                            {columns.map((col) => (
-                                <Table.Cell
-                                    key={`${col}-${row._id || row.id}`}
-                                    style={{ maxHeight: '10px', overflow: 'hidden' }}
-                                >
-                                    {col === 'custom_classification' ? (
-                                        <CustomClassificationComponent
-                                            id={row._id ? row._id : row.id}
-                                            initialClassification={row.custom_classification}
-                                            customKey={row.kind}
-                                        />
-                                    ) : col === 'tags' ? (
-                                        <TagsComponent
-                                            id={row._id ? row._id : row.id}
-                                            tags={row.tags}
-                                            customKey={row.kind}
-                                        />
-                                    ) : (
-                                        <Tooltip content={row[col]}>
-                                            {truncateText(row[col], 30)}
-                                        </Tooltip>
-                                    )}
+                        <Table.HeadCell>Options</Table.HeadCell>
+                    </Table.Head>
+                    <Table.Body>
+                        {paginatedData.map((row) => (
+                            <Table.Row key={row._id || row.id}>
+                                <Table.Cell>{row.kind}</Table.Cell>
+                                {columns.map((col) => (
+                                    <Table.Cell
+                                        key={`${col}-${row._id || row.id}`}
+                                        style={{ maxHeight: '10px', overflow: 'hidden' }}
+                                    >
+                                        {col === 'custom_classification' ? (
+                                            <CustomClassificationComponent
+                                                id={row._id ? row._id : row.id}
+                                                initialClassification={row.custom_classification}
+                                                customKey={row.kind}
+                                            />
+                                        ) : col === 'tags' ? (
+                                            <TagsComponent
+                                                id={row._id ? row._id : row.id}
+                                                tags={row.tags}
+                                                customKey={row.kind}
+                                            />
+                                        ) : (
+                                            <Tooltip content={row[col]}>
+                                                {truncateText(row[col], 30)}
+                                            </Tooltip>
+                                        )}
+                                    </Table.Cell>
+                                ))}
+                                <Table.Cell>
+                                    <ActionsComponent row={row} customKey={row.kind} />
                                 </Table.Cell>
-                            ))}
-                            <Table.Cell>
-                                <ActionsComponent row={row} customKey={row.kind} />
-                            </Table.Cell>
-                        </Table.Row>
-                    ))}
-                </Table.Body>
-            </Table>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
+            </div>
             <Paginator.PageControl
                 onChange={handlePageChange}
                 current={currentPage}
                 totalPages={Math.ceil(filteredData.length / rowsPerPage)}
             />
-        </>
+        </div>
     );
 };
 
