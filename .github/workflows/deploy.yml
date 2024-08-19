@@ -28,9 +28,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: AKIAQFLZD3NEEU5XVAGH
-          aws-secret-access-key: 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
-          aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Check and Create Lambda Function
         run: |
@@ -111,9 +111,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: AKIAQFLZD3NEEU5XVAGH
-          aws-secret-access-key: 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
-          aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Create API Gateway
         run: |
