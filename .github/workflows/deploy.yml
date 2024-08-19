@@ -26,9 +26,10 @@ jobs:
           zip -r ../flask_backend.zip .
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Check and Create Lambda Function
@@ -36,7 +37,7 @@ jobs:
           aws lambda get-function --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} || \
           aws lambda create-function --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} \
             --runtime python3.x \
-            --role ${{ secrets.AWS_ROLE_ARN }} \
+            --role arn:aws:iam::${{ secrets.AWS_ROLE_ARN }}
             --handler app.lambda_handler \
             --zip-file fileb://flask_backend.zip \
             --timeout 15 \
@@ -73,9 +74,10 @@ jobs:
           zip -r ../../nodejs_service.zip .
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Check and Create Lambda Function
@@ -83,7 +85,7 @@ jobs:
           aws lambda get-function --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} || \
           aws lambda create-function --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} \
             --runtime nodejs14.x \
-            --role ${{ secrets.AWS_ROLE_ARN }} \
+            --role arn:aws:iam::${{ secrets.AWS_ROLE_ARN }}
             --handler index.handler \
             --zip-file fileb://nodejs_service.zip \
             --timeout 15 \
@@ -107,9 +109,10 @@ jobs:
 
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Create API Gateway
