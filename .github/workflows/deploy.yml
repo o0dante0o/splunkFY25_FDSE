@@ -1,0 +1,134 @@
+name: Deploy Backend to AWS Lambda
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_flask:
+    name: Deploy Flask API to AWS Lambda
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt -t .
+          zip -r ../flask_backend.zip .
+
+      - name: Check and Create Lambda Function
+        run: |
+          aws lambda get-function --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} || \
+          aws lambda create-function --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} \
+            --runtime python3.x \
+            --role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/YOUR_ROLE_NAME \
+            --handler app.lambda_handler \
+            --zip-file fileb://flask_backend.zip \
+            --timeout 15 \
+            --memory-size 256
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Update Lambda Environment Variables
+        run: |
+          aws lambda update-function-configuration \
+            --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} \
+            --environment "Variables={MONGO_URI=${{ secrets.MONGO_URI }},MONGO_DB_NAME=${{ secrets.MONGO_DB_NAME }},TYPESENSE_HOST=${{ secrets.TYPESENSE_HOST }},TYPESENSE_PORT=${{ secrets.TYPESENSE_PORT }},TYPESENSE_PROTOCOL=${{ secrets.TYPESENSE_PROTOCOL }},TYPESENSE_ADMIN_API_KEY=${{ secrets.TYPESENSE_ADMIN_API_KEY }}}"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to AWS Lambda
+        uses: appleboy/lambda-action@v1.2.0
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }}
+          zip_file: flask_backend.zip
+          handler_name: app.lambda_handler
+
+  deploy_nodejs:
+    name: Deploy Node.js Service to AWS Lambda
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: |
+          cd backend/typesense_supplier
+          npm install
+          zip -r ../../nodejs_service.zip .
+
+      - name: Check and Create Lambda Function
+        run: |
+          aws lambda get-function --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} || \
+          aws lambda create-function --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} \
+            --runtime nodejs14.x \
+            --role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/YOUR_ROLE_NAME \
+            --handler index.handler \
+            --zip-file fileb://nodejs_service.zip \
+            --timeout 15 \
+            --memory-size 256
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Update Lambda Environment Variables
+        run: |
+          aws lambda update-function-configuration \
+            --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} \
+            --environment "Variables={MONGO_URI=${{ secrets.MONGO_URI }},MONGO_DB_NAME=${{ secrets.MONGO_DB_NAME }},TYPESENSE_HOST=${{ secrets.TYPESENSE_HOST }},TYPESENSE_PORT=${{ secrets.TYPESENSE_PORT }},TYPESENSE_PROTOCOL=${{ secrets.TYPESENSE_PROTOCOL }},TYPESENSE_ADMIN_API_KEY=${{ secrets.TYPESENSE_ADMIN_API_KEY }}}"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to AWS Lambda
+        uses: appleboy/lambda-action@v1.2.0
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }}
+          zip_file: nodejs_service.zip
+          handler_name: index.handler
+
+  setup_api_gateway:
+    name: Setup API Gateway
+    runs-on: ubuntu-latest
+    needs: [deploy_flask, deploy_nodejs]
+
+    steps:
+      - name: Create API Gateway
+        run: |
+          REST_API_ID=$(aws apigateway create-rest-api --name "MyAPI" --query 'id' --output text)
+          PARENT_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query 'items[?path==`/`].id' --output text)
+          RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_RESOURCE_ID --path-part "api" --query 'id' --output text)
+          aws apigateway put-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method GET --authorization-type "NONE"
+          aws apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method GET --type AWS_PROXY --integration-http-method POST --uri "arn:aws:apigateway:${{ secrets.AWS_REGION }}:lambda:path/2015-03-31/functions/arn:aws:lambda:${{ secrets.AWS_REGION }}:${{ secrets.AWS_ACCOUNT_ID }}:function:${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }}/invocations"
+          aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
