@@ -30,7 +30,7 @@ jobs:
         with:
           aws-access-key-id: AKIAQFLZD3NEEU5XVAGH
           aws-secret-access-key: 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
-          aws-region: us-eats-1
+          aws-region: us-east-1
 
       - name: Check and Create Lambda Function
         run: |
@@ -113,7 +113,7 @@ jobs:
         with:
           aws-access-key-id: AKIAQFLZD3NEEU5XVAGH
           aws-secret-access-key: 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
-          aws-region: us-eats-1
+          aws-region: us-east-1
 
       - name: Create API Gateway
         run: |
