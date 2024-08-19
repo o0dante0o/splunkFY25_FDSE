@@ -51,14 +51,14 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to AWS Lambda
-        uses: appleboy/lambda-action@v0.3.0
+        uses: aws-actions/aws-cli-action@v1
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ secrets.AWS_REGION }}
-          function_name: ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }}
-          zip_file: flask_backend.zip
-          handler_name: app.lambda_handler
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          command: |
+            aws lambda update-function-code --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} --zip-file fileb://flask_backend.zip
+            aws lambda update-function-configuration --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} --handler app.lambda_handler
 
   deploy_nodejs:
     name: Deploy Node.js Service to AWS Lambda
@@ -105,14 +105,14 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to AWS Lambda
-        uses: appleboy/lambda-action@v0.3.0
+        uses: aws-actions/aws-cli-action@v1
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ secrets.AWS_REGION }}
-          function_name: ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }}
-          zip_file: nodejs_service.zip
-          handler_name: index.handler
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          command: |
+            aws lambda update-function-code --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} --zip-file fileb://nodejs_service.zip
+            aws lambda update-function-configuration --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} --handler index.handler
 
   setup_api_gateway:
     name: Setup API Gateway
