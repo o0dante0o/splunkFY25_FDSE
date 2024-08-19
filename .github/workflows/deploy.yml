@@ -21,9 +21,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd backend
+          cd src/backend
           pip install -r requirements.txt -t .
-          zip -r ../flask_backend.zip .
+          zip -r ../../../flask_backend.zip .
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -32,14 +32,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Upload Flask ZIP to S3
+        run: |
+          aws s3 cp ../../../flask_backend.zip s3://${{ secrets.S3_BUCKET_NAME }}/flask_backend.zip
+
       - name: Check and Create Lambda Function
         run: |
           aws lambda get-function --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} || \
           aws lambda create-function --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} \
             --runtime python3.x \
-            --role arn:aws:iam::${{ secrets.AWS_ROLE_ARN }}
+            --role arn:aws:iam::${{ secrets.AWS_ROLE_ARN }} \
             --handler app.lambda_handler \
-            --zip-file fileb://flask_backend.zip \
+            --code S3Bucket=${{ secrets.S3_BUCKET_NAME }},S3Key=flask_backend.zip \
             --timeout 15 \
             --memory-size 256
 
@@ -51,7 +55,7 @@ jobs:
 
       - name: Deploy to AWS Lambda
         run: |
-          aws lambda update-function-code --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} --zip-file fileb://flask_backend.zip
+          aws lambda update-function-code --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} --s3-bucket ${{ secrets.S3_BUCKET_NAME }} --s3-key flask_backend.zip
           aws lambda update-function-configuration --function-name ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }} --handler app.lambda_handler
 
   deploy_nodejs:
@@ -69,7 +73,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd backend/typesense_supplier
+          cd src/nodeapp
           npm install
           zip -r ../../nodejs_service.zip .
 
@@ -80,14 +84,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Upload Node.js ZIP to S3
+        run: |
+          aws s3 cp ../../nodejs_service.zip s3://${{ secrets.S3_BUCKET_NAME }}/nodejs_service.zip
+
       - name: Check and Create Lambda Function
         run: |
           aws lambda get-function --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} || \
           aws lambda create-function --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} \
             --runtime nodejs14.x \
-            --role arn:aws:iam::${{ secrets.AWS_ROLE_ARN }}
+            --role arn:aws:iam::${{ secrets.AWS_ROLE_ARN }} \
             --handler index.handler \
-            --zip-file fileb://nodejs_service.zip \
+            --code S3Bucket=${{ secrets.S3_BUCKET_NAME }},S3Key=nodejs_service.zip \
             --timeout 15 \
             --memory-size 256
 
@@ -99,7 +107,7 @@ jobs:
 
       - name: Deploy to AWS Lambda
         run: |
-          aws lambda update-function-code --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} --zip-file fileb://nodejs_service.zip
+          aws lambda update-function-code --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} --s3-bucket ${{ secrets.S3_BUCKET_NAME }} --s3-key nodejs_service.zip
           aws lambda update-function-configuration --function-name ${{ secrets.LAMBDA_NODE_FUNCTION_NAME }} --handler index.handler
 
   setup_api_gateway:
