@@ -36,16 +36,3 @@ jobs:
           aws lambda update-function-code \
             --function-name $LAMBDA_FLASK_FUNCTION_NAME \
             --zip-file fileb://../function.zip
-
-      - name: Add API Gateway permissions
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          LAMBDA_FLASK_FUNCTION_NAME: ${{ secrets.LAMBDA_FLASK_FUNCTION_NAME }}
-        run: |
-          aws lambda add-permission \
-            --function-name $LAMBDA_FLASK_FUNCTION_NAME \
-            --statement-id apigateway-access \
-            --action lambda:InvokeFunction \
-            --principal apigateway.amazonaws.com
