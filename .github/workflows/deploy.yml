@@ -24,13 +24,7 @@ jobs:
           cd backend
           pip install -r requirements.txt -t .
           zip -r ../flask_backend.zip .
-
-      - name: Verify Flask ZIP file
-        run: |
-          if [ ! -f ../flask_backend.zip ]; then
-            echo "Flask ZIP file not found!"
-            exit 1
-          fi
+          unzip -l ../flask_backend.zip
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -88,13 +82,7 @@ jobs:
           cd backend/typesense_supplier
           npm install
           zip -r ../../nodejs_service.zip .
-
-      - name: Verify Node.js ZIP file
-        run: |
-          if [ ! -f ../../nodejs_service.zip ]; then
-            echo "Node.js ZIP file not found!"
-            exit 1
-          fi
+          unzip -l ../../nodejs_service.zip
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
