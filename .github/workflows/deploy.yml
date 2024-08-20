@@ -25,12 +25,24 @@ jobs:
           pip install -r requirements.txt -t .
           zip -r ../flask_backend.zip .
 
+      - name: Verify Flask ZIP file
+        run: |
+          if [ ! -f ../flask_backend.zip ]; then
+            echo "Flask ZIP file not found!"
+            exit 1
+          fi
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Create S3 bucket if not exists
+        run: |
+          aws s3api head-bucket --bucket ${{ secrets.S3_BUCKET_NAME }} || \
+          aws s3api create-bucket --bucket ${{ secrets.S3_BUCKET_NAME }} --region ${{ secrets.AWS_REGION }} --create-bucket-configuration LocationConstraint=${{ secrets.AWS_REGION }}
 
       - name: Upload Flask ZIP to S3
         run: |
@@ -77,12 +89,24 @@ jobs:
           npm install
           zip -r ../../nodejs_service.zip .
 
+      - name: Verify Node.js ZIP file
+        run: |
+          if [ ! -f ../../nodejs_service.zip ]; then
+            echo "Node.js ZIP file not found!"
+            exit 1
+          fi
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Create S3 bucket if not exists
+        run: |
+          aws s3api head-bucket --bucket ${{ secrets.S3_BUCKET_NAME }} || \
+          aws s3api create-bucket --bucket ${{ secrets.S3_BUCKET_NAME }} --region ${{ secrets.AWS_REGION }} --create-bucket-configuration LocationConstraint=${{ secrets.AWS_REGION }}
 
       - name: Upload Node.js ZIP to S3
         run: |
