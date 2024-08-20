@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from bson.objectid import ObjectId
 import re
 from flask_cors import CORS
+from aws_lambda_wsgi import response as aws_lambda_response, handler as aws_lambda_handler
 
 app = Flask(__name__)
 CORS(app)
@@ -233,6 +234,9 @@ def remove():
         return jsonify({"error": f"Document with id {doc_id} not found in any collection"}), 404
 
     return jsonify({"message": "Operation completed successfully"}), 200
+
+def lambda_handler(event, context):
+    return aws_lambda_handler(app, event, context)
 
 if __name__ == '__main__':
     app.run(debug=True)
