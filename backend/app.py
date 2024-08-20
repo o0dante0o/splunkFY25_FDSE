@@ -114,7 +114,7 @@ def list_all():
     
     return jsonify(result), 200
 
-@app.route('/add_document', methods=['GET'])
+@app.route('/test', methods=['GET'])
 def test():
     return jsonify({"message": "Hello, Splunk! This is a test endpoint"}), 200
 
