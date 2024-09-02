@@ -33,7 +33,7 @@ etl/
 ### Prerequisites
 
 Ensure you have the following installed and configured:
-
+- Splunk Enterprise
 - Python 3.x
 - Splunk SDK for Python
 - MongoDB Atlas
